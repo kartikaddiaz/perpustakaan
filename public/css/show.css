@@ -1,0 +1,108 @@
+/* ================================
+   TEMA HITAM PUTIH ELEGAN + TRANSISI
+   ================================ */
+
+/* Body dasar */
+body {
+  background-color: #f8f9fa;
+  color: #222;
+  font-family: "Poppins", sans-serif;
+  transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+/* Pastikan navbar & footer tidak ikut transisi */
+header, nav, footer {
+  transition: none !important;
+}
+
+/* Card detail buku */
+.card {
+  background: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 16px;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+}
+
+/* Gambar buku */
+.card img {
+  transition: transform 0.4s ease, filter 0.4s ease;
+}
+
+.card img:hover {
+  transform: scale(1.03);
+  filter: brightness(1.1);
+}
+
+/* Tombol */
+.btn {
+  border-radius: 8px;
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+}
+
+/* Tombol hijau */
+.btn-success {
+  background-color: #000;
+  color: #fff;
+  border: none;
+}
+
+.btn-success:hover {
+  background-color: #222;
+  transform: scale(1.05);
+}
+
+/* Tombol abu-outline */
+.btn-outline-secondary {
+  border: 1px solid #000;
+  color: #000;
+}
+
+.btn-outline-secondary:hover {
+  background-color: #000;
+  color: #fff;
+}
+
+/* Garis pembatas */
+hr {
+  border-top: 1px solid #ccc;
+  opacity: 0.7;
+}
+
+/* ================================
+   Bagian Rekomendasi Buku
+   ================================ */
+.card-body h6 {
+  color: #111;
+  transition: color 0.3s ease;
+}
+
+.card-body h6:hover {
+  color: #000;
+}
+
+.card-body p {
+  color: #555;
+}
+
+/* ================================
+   Animasi muncul halus
+   ================================ */
+.container, .card, .row {
+  animation: fadeIn 0.6s ease forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
