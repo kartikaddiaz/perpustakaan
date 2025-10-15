@@ -1,0 +1,101 @@
+/* ====== BASE ====== */
+body {
+  font-family: 'Poppins', sans-serif;
+  color: #222;
+  background-color: #f8f9fa;
+}
+
+/* Header tidak ikut animasi */
+
+/* ====== ANIMASI ====== */
+.fade-in-content {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 0.9s ease forwards;
+}
+
+.fade-in-element {
+  opacity: 0;
+  transform: translateY(25px);
+  animation: fadeIn 1s ease forwards;
+}
+
+/* Delay bertahap buat elemen-elemen */
+.fade-in-element:nth-child(2) { animation-delay: 0.1s; }
+.fade-in-element:nth-child(3) { animation-delay: 0.2s; }
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(25px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ====== TABEL ====== */
+.table {
+  border-radius: 10px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.table-dark {
+  background-color: #000 !important;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.table-hover tbody tr {
+  transition: all 0.25s ease;
+}
+
+.table-hover tbody tr:hover {
+  background-color: #f2f2f2;
+  transform: scale(1.01);
+}
+
+/* ====== GAMBAR BUKU ====== */
+.book-cover {
+  width: 60px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 6px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.book-cover:hover {
+  transform: scale(1.08);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+}
+
+/* ====== BUTTON ====== */
+.btn-outline-secondary {
+  border-color: #000;
+  color: #000;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-secondary:hover {
+  background-color: #000;
+  color: #fff;
+  transform: scale(1.05);
+}
+
+.btn-success {
+  transition: all 0.3s ease;
+}
+
+.btn-success:hover {
+  background-color: #28a745;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+}
+
+/* ====== ALERT ====== */
+.alert {
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}

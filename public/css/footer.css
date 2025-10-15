@@ -1,0 +1,25 @@
+footer {
+      background-color: #222831;
+    }
+    .text-light-50 {
+      color: rgba(255, 255, 255, 0.75);
+    }
+    footer a:hover {
+      color: #fff !important;
+    }
+    footer .row > div {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    @media (max-width: 768px) {
+      footer .row > div {
+        align-items: flex-start;
+      }
+      footer form {
+        flex-direction: column !important;
+      }
+      footer button {
+        width: 100%;
+      }
+    }

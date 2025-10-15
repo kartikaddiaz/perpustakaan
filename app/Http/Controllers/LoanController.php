@@ -1,0 +1,124 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Models\Book;
+use App\Models\Loan;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
+
+class LoanController extends Controller
+{
+    /**
+     * Form pinjam buku
+     */
+    public function create($book_id)
+    {
+        $book = Book::findOrFail($book_id);
+        return view('loan.user.history', compact('book'));
+    }
+
+    /**
+     * Simpan peminjaman
+     */
+    public function store(Request $request)
+    {
+        $request->validate([
+            'book_id' => 'required|exists:books,id',
+        ]);
+
+        $book = Book::findOrFail($request->book_id);
+
+        Loan::create([
+            'user_id'   => Auth::id(),
+            'book_id'   => $book->id,
+            'book_name' => $book->judul, // pastiin sesuai field di tabel books
+            'loan_date' => now(),
+            'cover'     => $book->cover,
+            'status'    => 'Dipinjam',
+        ]);
+
+        return redirect()->back()->with('success', 'Buku berhasil dipinjam!');
+    }
+
+    /**
+     * History peminjaman user
+     */
+    public function historyUser()
+    {
+        $loans = Loan::where('user_id', Auth::id())->with('book')->get();
+        return view('loan.user.history', compact('loans'));
+    }
+
+    /**
+     * Semua peminjaman user
+     */
+    public function index()
+    {
+        $loans = Loan::with('book')->where('user_id', Auth::id())->get();
+        return view('loans.index', compact('loans'));
+    }
+
+    /**
+     * Buku yang sedang dipinjam user
+     */
+    public function myBooks()
+    {
+        $userId = Auth::id();
+
+        $loans = Loan::where('user_id', $userId)
+            ->with('book')
+            ->get();
+
+        return view('book.mybooks', compact('loans'));
+    }
+
+    /**
+     * Baca buku PDF langsung dari storage
+     */
+    public function readBook($id)
+    {
+        $book = Book::findOrFail($id);
+
+        // pastikan user meminjam buku ini
+        $loan = Loan::where('book_id', $id)
+            ->where('user_id', Auth::id())
+            ->first();
+
+        if (!$loan) {
+            abort(403, 'Anda tidak memiliki akses untuk membaca buku ini.');
+        }
+
+        // ambil path PDF
+        $pdfPath = $book->pdf_path;
+
+        if (!$pdfPath) {
+            abort(404, 'File PDF belum diunggah untuk buku ini.');
+        }
+
+        $filePath = storage_path('app/public/' . $pdfPath);
+
+        if (!file_exists($filePath)) {
+            abort(404, 'File PDF tidak ditemukan di penyimpanan.');
+        }
+
+        return response()->file($filePath, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="' . $book->judul . '.pdf"',
+        ]);
+    }
+
+    /**
+     * Laporan peminjaman (untuk admin)
+     */
+    public function laporan()
+    {
+        // Ambil data peminjaman terbaru beserta relasi user & book
+        $latestLoans = Loan::with(['user', 'book'])
+            ->orderBy('loan_date', 'desc')
+            ->get();
+
+        return view('admin.laporan', compact('latestLoans'));
+    }
+}

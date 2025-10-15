@@ -1,0 +1,24 @@
+.header {
+    background-color: #ffffff;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.header .logo img {
+    height: 45px;
+}
+
+.header .btn-login {
+    background-color: #ffffff; /* putih */
+    color: #000; /* teks hitam */
+    border: 1.5px solid #000; /* garis tepi hitam */
+    border-radius: 25px;
+    padding: 6px 18px;
+    transition: all 0.3s ease;
+}
+
+.header .btn-login:hover {
+    background-color: #000; /* jadi hitam pas hover */
+    color: #fff; /* teks putih pas hover */
+}

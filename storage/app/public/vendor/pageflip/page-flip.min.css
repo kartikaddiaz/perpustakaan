@@ -1,0 +1,29 @@
+.page-flip {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.page-flip .page {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: #fff;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+.page-flip .page img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.page-flip .shadow {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to right, rgba(0,0,0,0.1), transparent);
+  opacity: 0.5;
+  pointer-events: none;
+}

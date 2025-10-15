@@ -1,0 +1,80 @@
+/* ====== BASE ====== */
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f8f9fa;
+  color: #222;
+}
+
+/* Header tetap statis tanpa animasi */
+
+/* ====== KONTEN UTAMA ====== */
+.fade-in-content {
+  opacity: 0;
+  transform: translateY(15px);
+  animation: fadeInUp 0.8s ease-in-out forwards;
+}
+
+/* Elemen yang ingin muncul halus (alert, tabel) */
+.fade-in-element {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInElement 0.9s ease-in-out forwards;
+}
+
+/* ====== ANIMASI ====== */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInElement {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ====== TABEL ====== */
+.table {
+  background-color: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.table thead {
+  background-color: #000 !important;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.table-hover tbody tr {
+  transition: all 0.25s ease;
+}
+
+.table-hover tbody tr:hover {
+  background-color: #efefef;
+  transform: scale(1.01);
+}
+
+/* ====== COVER BUKU ====== */
+.cover-img {
+  width: 60px;
+  height: 85px;
+  object-fit: cover;
+  border-radius: 6px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.cover-img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+}
+
+/* ====== ALERT ====== */
+.alert-info {
+  background-color: #f1f1f1;
+  color: #000;
+  font-weight: 500;
+  border: none;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}

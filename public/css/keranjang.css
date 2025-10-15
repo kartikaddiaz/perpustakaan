@@ -1,0 +1,47 @@
+    body {
+      background-color: #f8f9fb;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .book-card {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+      transition: all 0.3s ease;
+      overflow: hidden;
+    }
+
+    .book-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 18px rgba(0,0,0,0.1);
+    }
+
+    .book-cover {
+      height: 160px;
+      width: 115px;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+
+    .btn-action {
+      border-radius: 30px;
+      font-size: 0.85rem;
+    }
+
+    .book-info h6 {
+      font-weight: 600;
+      color: #333;
+    }
+
+    .book-info p {
+      font-size: 0.85rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .empty-state {
+      background: #fff;
+      border-radius: 16px;
+      padding: 40px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+    }
+

@@ -1,0 +1,152 @@
+/* ===== mybooks.css ===== */
+
+/* 🌸 BODY */
+body {
+  background-color: #f9f9f9;
+  font-family: 'Poppins', sans-serif;
+  color: #222;
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+/* ✨ Animasi muncul halus (tanpa ganggu header) */
+.fade-in {
+  animation: fadeIn 0.9s ease-in-out forwards;
+}
+
+.fade-in-delayed {
+  animation: fadeIn 1.2s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(25px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ====== TABEL ====== */
+.table {
+  background-color: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.table:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+/* 🔳 Header tabel hitam */
+.table thead {
+  background-color: #000;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.table thead th {
+  border: none !important;
+  padding: 14px 12px;
+  font-weight: 600;
+}
+
+/* 🔲 Hover baris */
+.table-hover tbody tr {
+  transition: background-color 0.25s ease, transform 0.25s ease;
+}
+
+.table-hover tbody tr:hover {
+  background-color: #efefef;
+  transform: scale(1.005);
+}
+
+/* ====== GAMBAR ====== */
+.book-cover {
+  width: 60px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  filter: grayscale(0%);
+}
+
+.book-cover:hover {
+  transform: scale(1.1);
+}
+
+/* ====== BUTTON ====== */
+.btn-dark {
+  background-color: #000;
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.btn-dark:hover {
+  background-color: #333;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+}
+
+.btn-outline-secondary {
+  border-color: #000;
+  color: #000;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-secondary:hover {
+  background-color: #000;
+  color: #fff;
+  transform: scale(1.05);
+}
+
+/* ====== ALERT ====== */
+.alert-info {
+  background-color: #f1f1f1;
+  color: #000;
+  font-weight: 500;
+  border: none;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+/* ====== DATATABLE CUSTOM ====== */
+.dataTables_wrapper .dataTables_filter input {
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 6px 10px;
+  background-color: #fff;
+  color: #000;
+  transition: all 0.3s ease;
+}
+
+.dataTables_wrapper .dataTables_filter input:focus {
+  border-color: #000;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.25);
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+  color: #000 !important;
+  border: none;
+  background: transparent;
+  transition: all 0.3s ease;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+  background: #000 !important;
+  color: #fff !important;
+  border-radius: 4px;
+}
+
+.dataTables_wrapper .dataTables_info {
+  color: #555;
+  font-size: 14px;
+}
+
+/* ====== BACK BUTTON (tombol "<") ====== */
+.back-btn {
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 6px 14px;
+}
