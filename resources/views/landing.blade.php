@@ -3,16 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard Pengguna - Perpustakaan</title>
+  <title>Landing - Perpustakaan</title>
   
   <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.datatables.net/2.3.4/css/dataTables.bootstrap5.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="{{ asset('css/beranda-admin.css') }}">
+  <link rel="stylesheet" href="{{ asset('css/beranda-user.css') }}">
 </head>
 <body class="bg-light text-dark">
 
-  @include('layouts.header')
+  @include('layouts.navbar')
 
   <main class="fade-in">
     <!-- Carousel -->

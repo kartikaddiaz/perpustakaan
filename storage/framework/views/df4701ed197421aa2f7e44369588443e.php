@@ -14,15 +14,20 @@
     </nav>
 
     <div class="icons d-flex align-items-center gap-3 text-white">
-        <!-- 🔹 Keranjang -->
-        <a href="<?php echo e(route('cart.index')); ?>" class="<?php echo e(Route::is('cart.index') ? 'active' : ''); ?>">
+        <a href="<?php echo e(route('favorites.index')); ?>" class="<?php echo e(Route::is('favorites.index') ? 'active' : ''); ?>" 
+        title="Buku Favorit">
+            <i class="bi bi-heart-fill fs-5" style="color: #ff4d6d;"></i>
+        </a>
+        <a href="<?php echo e(route('cart.index')); ?>" class="<?php echo e(Route::is('cart.index') ? 'active' : ''); ?>" 
+           title="Keranjang Buku">
             <i class="bi bi-cart4 fs-5"></i>
         </a>
-
-        <!-- 🔹 Logout -->
         <form action="<?php echo e(route('logout')); ?>" method="POST" class="d-inline m-0 p-0">
             <?php echo csrf_field(); ?>
-            <button type="submit" class="btn btn-link text-white text-decoration-none p-0 m-0 d-flex align-items-center gap-1" style="border: none;">
+            <button type="submit" 
+                    class="btn btn-link text-white text-decoration-none p-0 m-0 d-flex align-items-center gap-1" 
+                    style="border: none;" 
+                    title="Keluar">
                 <i class="bi bi-box-arrow-right fs-5"></i> 
             </button>
         </form>

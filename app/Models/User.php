@@ -7,6 +7,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\Cart;
 use App\Models\Loan;
+use App\Models\Favorite;
 
 class User extends Authenticatable
 {
@@ -29,4 +30,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Loan::class);
     }
+
+    public function favorites()
+{
+    return $this->hasMany(Favorite::class);
+}
+
 }

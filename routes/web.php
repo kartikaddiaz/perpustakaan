@@ -1,16 +1,19 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LoginAdminController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\LoanController;
-use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\UserDashboardController;
+use App\Http\Controllers\FavoriteController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\Auth\ResetPasswordController;
 
 
 Route::get('/', [LandingController::class, 'index'])->name('landing');
@@ -68,6 +71,21 @@ Route::delete('/loan/remove/{book_id}', [LoanController::class, 'removeBook'])->
 Route::get('/mybooks', [LoanController::class, 'myBooks'])->name('book.mybooks');
 Route::get('/book/{id}/read', [LoanController::class, 'readBook'])->name('books.read');
 
-
-
 Route::get('/books/{id}', [BookController::class, 'show'])->name('books.show');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/favorites', [FavoriteController::class, 'index'])->name('favorites.index');
+    Route::post('/favorites/{bookId}', [FavoriteController::class, 'toggle'])->name('favorites.toggle');
+});
+Route::patch('/anggota/{id}/ban', [App\Http\Controllers\UserController::class, 'ban'])->name('anggota.ban');
+
+Route::get('forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])
+    ->name('password.request');
+
+Route::post('forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])
+    ->name('password.email');
+
+Route::get('reset-password/{token}', [ResetPasswordController::class, 'showResetForm'])
+    ->name('password.reset');
+
+Route::post('reset-password', [ResetPasswordController::class, 'reset'])
+    ->name('password.update');

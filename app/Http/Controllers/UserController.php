@@ -79,5 +79,14 @@ class UserController extends Controller
         $user->delete();
         return redirect()->route('users.index')->with('success', 'User berhasil dihapus!');
     }
+     public function ban($id)
+{
+    $user = User::findOrFail($id);
+    $user->is_banned = !$user->is_banned;
+    $user->save();
+
+    $status = $user->is_banned ? 'diblokir' : 'diaktifkan kembali';
+    return redirect()->route('anggota.index')->with('success', "Akun {$user->name} berhasil {$status}.");
+}
 
 }

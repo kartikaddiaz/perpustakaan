@@ -1,0 +1,95 @@
+/* Font dan warna dasar */
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f8f9fa;
+}
+
+/* Efek animasi untuk konten (bukan navbar) */
+.main-content {
+  animation: fadeUp 0.7s ease-in-out;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Tombol back - hitam putih */
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 16px;
+  border: 1.5px solid #000;
+  border-radius: 8px;
+  background-color: #fff;
+  color: #000;
+  font-weight: 500;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.back-btn:hover {
+  background-color: #000;
+  color: #fff;
+  transform: translateX(-3px);
+}
+
+/* Header judul */
+.page-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 30px;
+}
+
+.page-header h3 {
+  margin: 0;
+  font-weight: 600;
+}
+
+/* Kartu buku */
+.card {
+  border-radius: 12px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
+}
+
+/* Tombol lihat buku */
+.btn-success {
+  background-color: #000 !important;
+  border-color: #000 !important;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn-success:hover {
+  background-color: #fff !important;
+  color: #000 !important;
+  border: 1.5px solid #000 !important;
+}
+
+/* Responsif spacing */
+@media (max-width: 576px) {
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .page-header h3 {
+    font-size: 1.25rem;
+  }
+}

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Book;
 use App\Models\User;
 use App\Models\Loan;
+use App\Models\Favorite; // ⬅️ Tambahkan ini
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -24,6 +25,7 @@ class AdminController extends Controller
         $today = Carbon::today()->toDateString();
         $totalLoansToday = Loan::whereDate('loan_date', $today)->count();
 
+        // 📚 Buku paling banyak dipinjam
         $mostBorrowedBooks = Loan::select('book_id', DB::raw('COUNT(*) as total_loans'))
             ->groupBy('book_id')
             ->orderByDesc('total_loans')
@@ -38,6 +40,21 @@ class AdminController extends Controller
                 ];
             });
 
+        // ❤️ Buku paling banyak difavoritkan
+        $mostFavoritedBooks = Favorite::select('book_id', DB::raw('COUNT(*) as total_favorites'))
+            ->groupBy('book_id')
+            ->orderByDesc('total_favorites')
+            ->take(5)
+            ->with('book')
+            ->get()
+            ->map(function ($favorite) {
+                return (object)[
+                    'id' => $favorite->book_id,
+                    'judul' => $favorite->book->judul ?? 'Tidak diketahui',
+                    'total_favorites' => (int)$favorite->total_favorites,
+                ];
+            });
+
         $latestBooks = Book::latest()->take(5)->get();
         $latestUsers = User::latest()->take(5)->get();
         $latestLoans = Loan::with(['book', 'user'])->latest()->take(5)->get();
@@ -48,12 +65,12 @@ class AdminController extends Controller
             'totalLoansActive' => $totalLoansActive,
             'totalLoansToday' => $totalLoansToday,
             'mostBorrowedBooks' => $mostBorrowedBooks,
+            'mostFavoritedBooks' => $mostFavoritedBooks, // ⬅️ kirim ke view
             'latestBooks' => $latestBooks,
             'latestUsers' => $latestUsers,
             'latestLoans' => $latestLoans,
         ]);
     }
-
 
     /** -------------------------------
      * KELOLA ANGGOTA

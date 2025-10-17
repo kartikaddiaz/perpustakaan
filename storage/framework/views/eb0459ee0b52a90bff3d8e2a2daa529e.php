@@ -18,6 +18,14 @@
     <?php echo $__env->make('layouts.navbar', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
   <?php endif; ?>
 
+<?php if(session('success')): ?>
+  <div class="alert alert-success alert-dismissible fade show" role="alert">
+    <?php echo e(session('success')); ?>
+
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+<?php endif; ?>
+
   <div class="container my-5">
     <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
       <div class="row g-0">
@@ -36,7 +44,24 @@
               <?php echo e($book->deskripsi); ?>
 
             </p>
-
+            <?php if(auth()->guard()->check()): ?>
+      <form action="<?php echo e(route('favorites.toggle', $book->id)); ?>" method="POST" class="d-inline">
+          <?php echo csrf_field(); ?>
+          <?php if($book->favorites->where('user_id', Auth::id())->count() > 0): ?>
+              <!-- Kalau buku SUDAH difavoritkan -->
+              <button type="submit" class="btn btn-favorite mt-3" title="Hapus dari Favorit">
+                  💔
+              </button>
+          <?php else: ?>
+              <!-- Kalau BELUM difavoritkan -->
+              <button type="submit" class="btn btn-favorite mt-3" title="Tambah ke Favorit">
+                  ❤️
+              </button>
+          <?php endif; ?>
+      </form>
+          <?php else: ?>
+            <a href="<?php echo e(route('login')); ?>" class="btn btn-outline-danger mt-3">❤️</a>
+          <?php endif; ?>
             <a href="<?php echo e(route('user.dashboard')); ?>" class="btn btn-outline-secondary mt-3">Kembali</a>
             <form action="<?php echo e(route('cart.add', $book->id)); ?>" method="POST" class="d-inline">
                 <?php echo csrf_field(); ?>

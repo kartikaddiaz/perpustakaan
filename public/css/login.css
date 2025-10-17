@@ -1,34 +1,55 @@
 /* === Font dan dasar warna === */
 body {
     font-family: 'Poppins', sans-serif;
-    background: #f8f9fa;
+    background: linear-gradient(135deg, #f3f3f3 0%, #e9ecef 100%);
     color: #222;
     display: flex;
     align-items: center;
     justify-content: center;
     min-height: 100vh;
     margin: 0;
+    position: relative;
+    overflow: hidden;
 }
 
-/* === Bentuk dekoratif di atas (optional) === */
+/* === Efek Fade dari Atas === */
+@keyframes fadeDown {
+    from {
+        opacity: 0;
+        transform: translateY(-25px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.auth-container {
+    opacity: 0;
+    animation: fadeDown 0.8s ease-out forwards;
+    animation-delay: 0.2s;
+}
+
+/* === Bentuk dekoratif atas === */
 .header-shape {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    height: 180px;
+    height: 220px;
     background: linear-gradient(135deg, #000 0%, #333 100%);
     clip-path: polygon(0 0, 100% 0, 100% 70%, 0 100%);
+    z-index: 0;
 }
 
-/* === Container utama === */
+/* === Kontainer utama === */
 .auth-container {
     position: relative;
     z-index: 2;
     background: #fff;
-    padding: 40px 50px;
-    border-radius: 18px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    padding: 45px 50px;
+    border-radius: 20px;
+    box-shadow: 0 4px 25px rgba(0,0,0,0.1);
     max-width: 420px;
     width: 100%;
     text-align: center;
@@ -44,9 +65,10 @@ body {
 .auth-container p {
     color: #666;
     margin-bottom: 25px;
+    font-weight: 500;
 }
 
-/* === Input dan label === */
+/* === Label & Input (termasuk username) === */
 label {
     display: block;
     text-align: left;
@@ -54,26 +76,11 @@ label {
     margin-top: 15px;
     margin-bottom: 6px;
     color: #333;
-}
-
-input[type="text"] {
-    width: 100%;
-    padding: 12px 15px;
-    border: 2px solid #ccc;
-    border-radius: 10px;
-    background: #fff;
-    color: #000;
     font-size: 15px;
-    transition: all 0.2s ease;
 }
 
-input[type="text"]:focus {
-    border-color: #000;
-    outline: none;
-    background: #f1f1f1;
-}
-
-
+/* Tambahin ini supaya username ikut gaya input lain */
+input[type="text"],
 input[type="email"],
 input[type="password"] {
     width: 100%;
@@ -83,11 +90,10 @@ input[type="password"] {
     background: #fff;
     color: #000;
     font-size: 15px;
-    transition: all 0.2s ease;
+    transition: all 0.25s ease;
 }
 
-input[type="email"]:focus,
-input[type="password"]:focus {
+input:focus {
     border-color: #000;
     outline: none;
     background: #f1f1f1;
@@ -119,7 +125,7 @@ input[type="password"]:focus {
     font-weight: 600;
     font-size: 16px;
     margin-top: 25px;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
 }
 
 .btn-submit:hover {
@@ -151,8 +157,97 @@ input[type="password"]:focus {
     color: #000;
     font-weight: 600;
     text-decoration: none;
+    transition: all 0.2s ease;
 }
 
 .register-text a:hover {
+    text-decoration: underline;
+}
+
+/* === Efek Hover Input === */
+input:hover {
+    box-shadow: 0 0 6px rgba(0,0,0,0.08);
+}
+
+/* === Responsif === */
+@media (max-width: 480px) {
+    .auth-container {
+        padding: 30px 25px;
+    }
+
+    .auth-container h1 {
+        font-size: 1.5rem;
+    }
+}
+/* === Tautan Lupa Password === */
+.forgot-password {
+    font-size: 14px;
+    color: #000;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.forgot-password:hover {
+    text-decoration: underline;
+}
+/* === Link kembali ke login === */
+.register-text a {
+    color: #000;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.register-text a:hover {
+    text-decoration: underline;
+}
+
+/* === Pesan sukses hijau === */
+.alert-success {
+    background: #d1e7dd;
+    color: #0f5132;
+    border: 1px solid #badbcc;
+    border-radius: 8px;
+    padding: 10px 15px;
+    margin-bottom: 15px;
+}
+
+/* === Baris Ingat Saya & Lupa Sandi === */
+.remember-forgot {
+    display: flex;
+    align-items: center; /* biar vertikalnya sejajar */
+    justify-content: space-between; /* kiri - kanan */
+    margin-top: 15px;
+}
+
+/* === Checkbox “Ingat saya” === */
+.remember-me {
+    display: flex;
+    align-items: center; /* sejajarin teks sama checkbox */
+    gap: 6px;
+    font-size: 14px;
+    color: #444;
+    margin: 0;
+    font-weight: 500;
+}
+
+.remember-me input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: #000; /* warna hitam waktu dicentang */
+    cursor: pointer;
+}
+
+/* === Link “Lupa sandi?” === */
+.forgot-password {
+    font-size: 14px;
+    color: #000;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.forgot-password:hover {
     text-decoration: underline;
 }

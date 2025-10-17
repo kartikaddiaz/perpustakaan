@@ -18,6 +18,13 @@
     @include('layouts.navbar')
   @endauth
 
+@if (session('success'))
+  <div class="alert alert-success alert-dismissible fade show" role="alert">
+    {{ session('success') }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+@endif
+
   <div class="container my-5">
     <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
       <div class="row g-0">
@@ -35,7 +42,24 @@
             <p class="mt-2" style="text-align: justify;">
               {{ $book->deskripsi }}
             </p>
-
+            @auth
+      <form action="{{ route('favorites.toggle', $book->id) }}" method="POST" class="d-inline">
+          @csrf
+          @if($book->favorites->where('user_id', Auth::id())->count() > 0)
+              <!-- Kalau buku SUDAH difavoritkan -->
+              <button type="submit" class="btn btn-favorite mt-3" title="Hapus dari Favorit">
+                  💔
+              </button>
+          @else
+              <!-- Kalau BELUM difavoritkan -->
+              <button type="submit" class="btn btn-favorite mt-3" title="Tambah ke Favorit">
+                  ❤️
+              </button>
+          @endif
+      </form>
+          @else
+            <a href="{{ route('login') }}" class="btn btn-outline-danger mt-3">❤️</a>
+          @endauth
             <a href="{{ route('user.dashboard') }}" class="btn btn-outline-secondary mt-3">Kembali</a>
             <form action="{{ route('cart.add', $book->id) }}" method="POST" class="d-inline">
                 @csrf

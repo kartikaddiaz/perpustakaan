@@ -1,85 +1,274 @@
-body {
+* {
+      font-family: "Poppins", sans-serif !important;
+      box-sizing: border-box;
+    }
+    
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Kartu utama */
+.card {
+  border-radius: 15px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  animation: slideUp 0.6s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+}
+
+/* Judul dan teks */
+h3, h6 {
   font-family: 'Poppins', sans-serif;
-  overflow-x: hidden;
 }
 
-/* Animasi umum */
-.fade-in {
-  opacity: 0;
-  transform: translateY(30px);
-  animation: fadeIn 0.8s ease-out forwards;
-}
-.fade-in-delayed {
-  opacity: 0;
-  transform: translateY(20px);
-  animation: fadeIn 1.2s ease-out 0.3s forwards;
-}
-@keyframes fadeIn {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Kartu kategori */
-.category-card {
-  width: 140px;
-  height: 70px;
+/* Chart Pie Container */
+.chart-container {
   display: flex;
   align-items: center;
-  justify-content: center;
-  background: #fff;
-  color: #000;
-  border: 1px solid #222;
-  border-radius: 12px;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-  transition: all 0.3s ease;
-}
-.category-card:hover {
-  background: #000;
-  color: #fff;
-  transform: translateY(-4px);
+  justify-content: space-between;
+  gap: 30px;
+  flex-wrap: wrap;
+  animation: slideUp 0.6s ease;
 }
 
-/* Buku */
-.book-card {
-  min-width: 210px;
-  max-width: 210px;
-  flex: 0 0 auto;
-  border: 1px solid #ddd;
-  border-radius: 14px;
-  overflow: hidden;
-  background: #fff;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+/* Ukuran pie chart biar gak gede */
+.chart-box {
+  flex: 0 0 45%;
+  max-width: 280px;
+  margin: auto;
+  transition: transform 0.3s ease;
 }
-.book-card:hover {
-  transform: translateY(-6px) scale(1.02);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-}
-.book-cover {
-  height: 280px;
-  width: 100%;
-  object-fit: cover;
-  transition: transform 0.4s ease;
-}
-.book-card:hover .book-cover {
+
+.chart-box:hover {
   transform: scale(1.05);
 }
 
-/* Search box */
-.search-box input {
-  border-right: none;
+/* List Buku Sampingan */
+.list-group-item {
+  transition: background-color 0.2s ease;
 }
-.search-box input:focus {
-  box-shadow: none;
-  border-color: #000;
+
+.list-group-item:hover {
+  background-color: #f8f9fa;
 }
-.search-box button {
-  border-left: none;
-  transition: all 0.3s ease;
+
+/* Responsif di layar kecil */
+@media (max-width: 768px) {
+  .chart-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .chart-box {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
 }
-.search-box button:hover {
-  background: #fff;
-  color: #000;
-  border: 1px solid #000;
+
+/* Thumbnail Cover */
+.cover-thumb {
+  width: 45px;
+  height: 65px;
+  object-fit: cover;
+  border-radius: 8px;
+  transition: transform 0.2s ease;
+}
+
+.cover-thumb:hover {
+  transform: scale(1.05);
+}
+/* ===== Styling untuk Dashboard Admin ===== */
+
+/* Animasi lembut muncul dari bawah */
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Kartu utama */
+.card {
+  border-radius: 15px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  animation: slideUp 0.6s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+}
+
+/* Judul dan teks */
+h3, h6 {
+  font-family: 'Poppins', sans-serif;
+}
+
+/* ===== Layout Chart dan List ===== */
+.chart-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  padding: 20px;
+  flex-wrap: wrap;
+  animation: fadeIn 0.6s ease-in-out;
+}
+
+/* Biar pie chart-nya gak kegedean */
+.chart-box {
+  flex: 0 0 30%;
+  max-width: 230px;
+  height: 230px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+  transition: transform 0.3s ease;
+}
+
+.chart-box canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.chart-box:hover {
+  transform: scale(1.05);
+}
+
+/* List buku di kanan */
+.book-list {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.book-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #f0f0f0;
+  padding: 8px 0;
+  transition: background-color 0.2s ease;
+}
+
+.book-item:hover {
+  background-color: #f8f9fa;
+}
+
+.book-item .badge {
+  font-size: 12px;
+  padding: 4px 8px;
+}
+
+/* Responsif */
+@media (max-width: 768px) {
+  .chart-section {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .chart-box {
+    max-width: 180px;
+    height: 180px;
+  }
+
+  .book-list {
+    width: 100%;
+  }
+}
+
+
+/* List Buku Sampingan */
+.list-group-item {
+  transition: background-color 0.2s ease;
+}
+
+.list-group-item:hover {
+  background-color: #f8f9fa;
+}
+
+/* Responsif di layar kecil */
+@media (max-width: 768px) {
+  .chart-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .chart-box {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}
+
+/* Thumbnail Cover */
+.cover-thumb {
+  width: 45px;
+  height: 65px;
+  object-fit: cover;
+  border-radius: 8px;
+  transition: transform 0.2s ease;
+}
+
+.cover-thumb:hover {
+  transform: scale(1.05);
+}
+
+.chart-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: nowrap;
+}
+
+.chart-section .chart-box {
+  flex: 0 0 180px;
+  max-width: 180px;
+  height: 180px;
+  margin: auto;
+}
+
+.chart-section canvas {
+  width: 100% !important;
+  height: 100% !important;
+  transition: transform 0.3s ease;
+}
+
+.chart-section canvas:hover {
+  transform: scale(1.05);
+}
+
+.chart-section .list-box {
+  flex: 1;
+  min-width: 200px;
+}
+
+/* Supaya dua card sejajar gak terlalu lebar */
+.col-lg-6 {
+  display: flex;
+}
+
+.card.h-100 {
+  width: 100%;
+}
+
+/* Responsif */
+@media (max-width: 992px) {
+  .chart-section {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .chart-section .chart-box {
+    max-width: 160px;
+    height: 160px;
+  }
+
+  .chart-section .list-box {
+    width: 100%;
+  }
 }

@@ -4,18 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Riwayat Peminjaman</title>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdn.datatables.net/2.3.4/css/dataTables.bootstrap5.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.datatables.net/2.3.4/css/dataTables.bootstrap5.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{{ asset('css/history.css') }}?v={{ time() }}">
 </head>
 
 <body class="bg-light">
-
-<!-- Header TIDAK dianimasi -->
 @include('layouts.header')
 
-<!-- Konten utama dengan animasi -->
 <div class="container mt-4 fade-in-content">
     <div class="d-flex align-items-center mb-4">
         <a href="{{ url()->previous() }}" class="btn btn-outline-secondary me-4">&lt;</a>
@@ -39,23 +36,36 @@
             <table id="loanHistory" class="table table-striped align-middle shadow-sm">
                 <thead class="table-dark">
                     <tr>
-                        <th>Tanggal Peminjaman</th>
                         <th>Cover</th>
                         <th>Judul Buku</th>
                         <th>Penulis</th>
+                        <th>Tanggal Peminjaman</th>
+                        <th>Tanggal Expired</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($loans as $loan)
                         <tr>
-                            <td>{{ \Carbon\Carbon::parse($loan->created_at)->translatedFormat('d F Y') }}</td>
+                            <!-- Cover buku -->
                             <td>
                                 <img src="{{ asset('img/' . basename($loan->book->cover ?? 'default.jpg')) }}" 
                                      alt="{{ $loan->book_name ?? $loan->book->judul }}" 
                                      class="cover-img">
                             </td>
+
+                            <!-- Judul buku -->
                             <td>{{ $loan->book_name ?? $loan->book->judul }}</td>
+
+                            <!-- Penulis -->
                             <td>{{ $loan->book->penulis ?? '-' }}</td>
+                            <td>{{ Carbon::parse($loan->created_at)->translatedFormat('d F Y') }}</td>
+                            <td>
+                                @if($loan->return_date)
+                                    {{ Carbon::parse($loan->return_date)->translatedFormat('d F Y') }}
+                                @else
+                                    <span class="text-muted">Belum ditentukan</span>
+                                @endif
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>
@@ -72,21 +82,18 @@
 
 <!-- ✅ Aktifkan DataTables -->
 <script>
-  new DataTable('#loanHistory', {
-    responsive: true,
-    order: [[0, 'desc']],
-    pageLength: 10,
-    language: {
-      search: "Cari Riwayat:",
-      lengthMenu: "Tampilkan _MENU_ data per halaman",
-      info: "Menampilkan _START_–_END_ dari _TOTAL_ riwayat",
-      paginate: {
-        previous: "‹",
-        next: "›"
-      },
-      zeroRecords: "Tidak ada data ditemukan."
-    }
-  });
+new DataTable('#loanHistory', {
+  responsive: true,
+  order: [[0, 'desc']],
+  pageLength: 10,
+  language: {
+    search: "Cari Riwayat:",
+    lengthMenu: "Tampilkan _MENU_ data per halaman",
+    info: "Menampilkan _START_–_END_ dari _TOTAL_ riwayat",
+    paginate: { previous: "‹", next: "›" },
+    zeroRecords: "Tidak ada data ditemukan."
+  }
+});
 </script>
 
 </body>

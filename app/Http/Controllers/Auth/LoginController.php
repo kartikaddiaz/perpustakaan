@@ -12,17 +12,20 @@ class LoginController extends Controller
     {
         $credentials = $request->only('email', 'password');
 
-        // Coba login ke guard 'admin' dulu
         if (Auth::guard('admin')->attempt($credentials, $request->filled('remember'))) {
             return redirect()->route('admin.dashboard'); // arahkan ke dashboard admin
         }
-
-        // Kalau gagal, coba login ke guard 'web' (pengguna biasa)
         if (Auth::guard('web')->attempt($credentials, $request->filled('remember'))) {
-            return redirect()->route('user.dashboard'); // arahkan ke dashboard user
-        }
+            $user = Auth::guard('web')->user();
+            if ($user->is_banned) {
+                Auth::guard('web')->logout();
 
-        // Kalau dua-duanya gagal
+                return back()->withErrors([
+                    'email' => 'Akun Anda telah diblokir oleh admin dan tidak dapat login.'
+                ]);
+            }
+            return redirect()->route('user.dashboard');
+        }
         return back()->withErrors(['email' => 'Email atau sandi salah.']);
     }
 
@@ -40,5 +43,16 @@ class LoginController extends Controller
         $request->session()->regenerateToken();
 
         return redirect()->route('login');
+    }
+
+    // (opsional, tidak dipakai di logika ini tapi boleh disimpan)
+    protected function authenticated(Request $request, $user)
+    {
+        if ($user->is_banned) {
+            Auth::logout();
+
+            return redirect()->route('login')
+                ->withErrors(['email' => 'Akun Anda telah diblokir oleh admin dan tidak dapat login.']);
+        }
     }
 }

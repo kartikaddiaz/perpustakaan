@@ -33,7 +33,7 @@ class LoanController extends Controller
         Loan::create([
             'user_id'   => Auth::id(),
             'book_id'   => $book->id,
-            'book_name' => $book->judul, // pastiin sesuai field di tabel books
+            'book_name' => $book->judul,
             'loan_date' => now(),
             'cover'     => $book->cover,
             'status'    => 'Dipinjam',
@@ -62,11 +62,18 @@ class LoanController extends Controller
 
     /**
      * Buku yang sedang dipinjam user
+     * (otomatis hapus setelah 7 hari)
      */
     public function myBooks()
     {
         $userId = Auth::id();
 
+        // 🔹 Hapus otomatis pinjaman yang sudah lebih dari 7 hari
+        Loan::where('user_id', $userId)
+            ->where('created_at', '<', Carbon::now()->subDays(7))
+            ->delete();
+
+        // 🔹 Ambil pinjaman aktif milik user setelah yang expired dihapus
         $loans = Loan::where('user_id', $userId)
             ->with('book')
             ->get();
@@ -114,7 +121,6 @@ class LoanController extends Controller
      */
     public function laporan()
     {
-        // Ambil data peminjaman terbaru beserta relasi user & book
         $latestLoans = Loan::with(['user', 'book'])
             ->orderBy('loan_date', 'desc')
             ->get();

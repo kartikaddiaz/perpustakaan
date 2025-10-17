@@ -7,13 +7,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="<?php echo e(asset('css/login.css')); ?>" rel="stylesheet">
-
 </head>
 <body>
     <div class="header-shape"></div>
 
     <div class="auth-container">
-        <h1>Selamat Datang!</h1>
+        <h2><b>Selamat Datang!</b></h2>
         <p>Masuk ke akun Anda</p>
 
         <!-- Pesan error -->
@@ -37,15 +36,20 @@
             <label for="password">Sandi</label>
             <input type="password" id="password" name="password" required autocomplete="current-password">
 
-            <div class="remember-me">
-                <input type="checkbox" id="remember" name="remember">
-                <label for="remember">Ingat saya</label>
+            <div class="d-flex justify-content-between align-items-center mt-2">
+                <div class="remember-forgot">
+                <label class="remember-me">
+                    <input type="checkbox" name="remember"> Ingat saya
+                </label>
+            </div>
+                <a href="<?php echo e(route('password.request')); ?>" class="forgot-password">Lupa sandi?</a>
             </div>
 
-            <button type="submit" class="btn-submit">MASUK</button>
+            <button type="submit" class="btn-submit mt-3">MASUK</button>
         </form>
 
-        <p class="register-text">Belum punya akun?
+        <p class="register-text">
+            Belum punya akun?
             <a href="<?php echo e(route('register')); ?>">Daftar di sini</a>
         </p>
     </div>
