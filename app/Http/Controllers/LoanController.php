@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Book;
 use App\Models\Loan;
+use App\Models\Review;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
@@ -127,4 +128,32 @@ class LoanController extends Controller
 
         return view('admin.laporan', compact('latestLoans'));
     }
+   public function updateReview(Request $request, $id)
+{
+    $request->validate([
+        'rating' => 'nullable|integer|min:1|max:5',
+        'review' => 'nullable|string|max:1000',
+    ]);
+
+    $loan = Loan::findOrFail($id);
+    $loan->update([
+        'rating' => $request->rating,
+        'review' => $request->review,
+    ]);
+
+    // Tambahkan atau update di tabel reviews juga
+    Review::updateOrCreate(
+        [
+            'user_id' => $loan->user_id,
+            'book_id' => $loan->book_id,
+        ],
+        [
+            'cover' => $loan->book->cover ?? null,
+            'rating' => $request->rating,
+            'komentar' => $request->review,
+        ]
+    );
+
+    return back()->with('status', 'Berhasil menambahkan ulasan dan rating!');
+}
 }

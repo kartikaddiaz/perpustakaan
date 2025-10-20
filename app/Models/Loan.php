@@ -29,4 +29,11 @@ class Loan extends Model
     {
         return $this->belongsTo(Book::class);
     }
+
+    // app/Models/Loan.php
+public function review()
+{
+    return $this->hasOne(\App\Models\Review::class, 'loan_id');
+}
+
 }

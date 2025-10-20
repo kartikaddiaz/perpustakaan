@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Landing - Perpustakaan</title>
-  
+
   <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.datatables.net/2.3.4/css/dataTables.bootstrap5.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
@@ -28,11 +28,12 @@
       </div>
     </div>
 
-    <div class="container mt-4">
+    <!-- === Jelajahi Koleksi Buku === -->
+    <section class="container mt-5">
       <h3 class="text-center mb-4 fw-bold">Jelajahi Koleksi Buku</h3>
 
       <form method="GET" action="{{ route('user.dashboard') }}" class="mb-5">
-        <div class="input-group shadow-sm search-box">
+        <div class="input-group shadow-sm search-box mx-auto">
           <input type="text" name="search" class="form-control form-control-lg border-dark"
                  placeholder="Cari buku atau penulis..." value="{{ $search ?? '' }}">
           <button class="btn btn-dark px-4" type="submit">Cari</button>
@@ -43,14 +44,18 @@
       <div class="text-center mb-5 fade-in-delayed">
         <div class="d-flex flex-wrap justify-content-center gap-4">
           @foreach($categories->take(5) as $category)
-            <a href="{{ route('user.dashboard', ['category' => $category->id]) }}" class="text-decoration-none">
+            <a href="{{ route('user.dashboard', ['category' => $category->id]) }}" 
+              class="text-decoration-none" 
+              style="color: inherit;">
               <div class="category-card">
                 <p class="fw-semibold mb-0">{{ $category->nama }}</p>
               </div>
             </a>
           @endforeach
 
-          <a href="{{ route('user.dashboard') }}" class="text-decoration-none">
+          <a href="{{ route('user.dashboard') }}" 
+            class="text-decoration-none" 
+            style="color: inherit;">
             <div class="category-card">
               <p class="fw-semibold mb-0 text-muted">Lainnya</p>
             </div>
@@ -58,6 +63,7 @@
         </div>
       </div>
 
+      <!-- === Buku Populer === -->
       <div class="mt-5 fade-in-delayed">
         <h4 class="fw-semibold mb-4 text-center">Yang Populer di Antara Koleksi Kami</h4>
 
@@ -68,9 +74,9 @@
                    alt="{{ $book->judul }}"
                    class="book-cover">
               <div class="card-body text-center p-3">
-                <h6 class="fw-bold mb-1">{{ $book->judul }}</h6>
+                <h6 class="fw-bold mb-1 text-truncate">{{ $book->judul }}</h6>
                 <p class="text-muted small mb-2">{{ $book->penulis }}</p>
-                <a href="{{ route('books.show', $book->id) }}" class="btn btn-outline-dark btn-sm px-3 py-1">
+                <a href="{{ route('login') }}" class="btn btn-outline-dark btn-sm px-3 py-1">
                   Lihat Buku
                 </a>
               </div>
@@ -80,6 +86,55 @@
           @endforelse
         </div>
       </div>
+
+      <!-- === Buku Terbaru Minggu Ini === -->
+      <section class="mt-5 fade-in-delayed">
+        <h4 class="fw-semibold mb-4 text-center">Buku Terbaru Minggu Ini</h4>
+
+        <div class="d-flex flex-nowrap overflow-auto pb-3 px-2" style="gap: 25px;">
+          @forelse($newBooks as $book)
+            <div class="book-card">
+              <img src="{{ asset('img/' . basename($book->cover)) }}"
+                   alt="{{ $book->judul }}"
+                   class="book-cover">
+              <div class="card-body text-center p-3">
+                <h6 class="fw-bold mb-1 text-truncate">{{ $book->judul }}</h6>
+                <p class="text-muted small mb-2">{{ $book->penulis }}</p>
+                <a href="{{ route('login') }}" class="btn btn-outline-dark btn-sm px-3 py-1">
+                  Lihat Buku
+                </a>
+              </div>
+            </div>
+          @empty
+            <div class="text-center text-muted w-100">Belum ada buku baru minggu ini.</div>
+          @endforelse
+        </div>
+      </section>
+
+      <!-- === Ulasan & Rating Pengguna === -->
+      <section class="mt-5 fade-in-delayed">
+        <h4 class="fw-semibold mb-4 text-center">Ulasan & Rating Pengguna</h4>
+
+        <div class="d-flex flex-nowrap overflow-auto pb-3 px-2" style="gap: 25px;">
+          @forelse($reviews as $review)
+            <div class="review-card p-3 shadow-sm rounded text-center" style="min-width: 250px;">
+              <img src="{{ asset('img/' . basename($review->book->cover ?? 'default.jpg')) }}" 
+                   alt="{{ $review->book->judul ?? '-' }}" 
+                   class="rounded mb-2" style="height: 150px; object-fit: cover;">
+              <h6 class="fw-bold">{{ $review->book->judul ?? '-' }}</h6>
+              <p class="text-muted small mb-1">{{ $review->user->name ?? 'Anonim' }}</p>
+              <div class="text-warning mb-2">
+                @for($i = 1; $i <= 5; $i++)
+                  <span class="{{ $i <= $review->rating ? '' : 'text-secondary' }}">&#9733;</span>
+                @endfor
+              </div>
+              <p class="small fst-italic text-muted">"{{ Str::limit($review->komentar, 80) }}"</p>
+            </div>
+          @empty
+            <div class="text-center text-muted w-100">Belum ada ulasan yang dibuat pengguna.</div>
+          @endforelse
+        </div>
+      </section>
     </div>
   </main>
 

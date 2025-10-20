@@ -78,3 +78,65 @@ body {
   border: none;
   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
+/* Gaya cover buku */
+.cover-img {
+    width: 50px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+/* Star rating interaktif */
+.star-rating {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: start;
+}
+
+.star-rating input {
+    display: none;
+}
+
+.star-rating label {
+    font-size: 1rem;
+    color: #ccc;
+    cursor: pointer;
+    margin-right: 2px;
+}
+
+.star-rating input:checked ~ label,
+.star-rating label:hover,
+.star-rating label:hover ~ label {
+    color: #ffc107; /* Bintang kuning */
+}
+
+/* Textarea review */
+.review-textarea {
+    width: 100%;
+}
+
+/* Form di tabel */
+td form {
+    margin: 0;
+}
+
+/* Tombol simpan hitam */
+.btn-black {
+    background-color: #000;
+    color: #fff;
+    border: none;
+}
+
+.btn-black:hover {
+    background-color: #333;
+}
+.review-textarea {
+    min-height: 80px; /* lebih tinggi */
+    resize: vertical; /* bisa ditarik ke atas-bawah */
+    font-size: 14px;
+    padding: 8px 10px;
+}
+#loanHistory td {
+    vertical-align: middle;
+    padding: 12px 10px;
+}

@@ -6,7 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Book;
 use App\Models\User;
 use App\Models\Loan;
-use App\Models\Favorite; // ⬅️ Tambahkan ini
+use App\Models\Favorite;
+use App\Models\Review;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -22,8 +23,7 @@ class AdminController extends Controller
         $totalBooks = Book::count();
         $totalUsers = User::count();
         $totalLoansActive = Loan::where('status', 'dipinjam')->count();
-        $today = Carbon::today()->toDateString();
-        $totalLoansToday = Loan::whereDate('loan_date', $today)->count();
+        $totalLoansToday = Loan::whereDate('loan_date', Carbon::today())->count();
 
         // 📚 Buku paling banyak dipinjam
         $mostBorrowedBooks = Loan::select('book_id', DB::raw('COUNT(*) as total_loans'))
@@ -36,7 +36,7 @@ class AdminController extends Controller
                 return (object)[
                     'id' => $loan->book_id,
                     'judul' => $loan->book->judul ?? 'Tidak diketahui',
-                    'total_loans' => (int)$loan->total_loans,
+                    'total_loans' => (int) $loan->total_loans,
                 ];
             });
 
@@ -51,25 +51,26 @@ class AdminController extends Controller
                 return (object)[
                     'id' => $favorite->book_id,
                     'judul' => $favorite->book->judul ?? 'Tidak diketahui',
-                    'total_favorites' => (int)$favorite->total_favorites,
+                    'total_favorites' => (int) $favorite->total_favorites,
                 ];
             });
 
+        // 📘 Buku, pengguna, dan peminjaman terbaru
         $latestBooks = Book::latest()->take(5)->get();
         $latestUsers = User::latest()->take(5)->get();
         $latestLoans = Loan::with(['book', 'user'])->latest()->take(5)->get();
 
-        return view('admin.dashboard', [
-            'totalBooks' => $totalBooks,
-            'totalUsers' => $totalUsers,
-            'totalLoansActive' => $totalLoansActive,
-            'totalLoansToday' => $totalLoansToday,
-            'mostBorrowedBooks' => $mostBorrowedBooks,
-            'mostFavoritedBooks' => $mostFavoritedBooks, // ⬅️ kirim ke view
-            'latestBooks' => $latestBooks,
-            'latestUsers' => $latestUsers,
-            'latestLoans' => $latestLoans,
-        ]);
+        // 🗣️ Review terbaru
+        $reviews = Review::with(['book', 'user'])
+            ->latest()
+            ->take(10)
+            ->get();
+
+        return view('admin.dashboard', compact(
+            'totalBooks', 'totalUsers', 'totalLoansActive', 'totalLoansToday',
+            'mostBorrowedBooks', 'mostFavoritedBooks',
+            'latestBooks', 'latestUsers', 'latestLoans', 'reviews'
+        ));
     }
 
     /** -------------------------------
@@ -109,7 +110,8 @@ class AdminController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        return redirect()->route('admin.anggota.index')->with('success', 'Anggota baru berhasil ditambahkan!');
+        return redirect()->route('admin.anggota.index')
+            ->with('success', 'Anggota baru berhasil ditambahkan!');
     }
 
     public function anggotaEdit(User $anggota)
@@ -133,12 +135,26 @@ class AdminController extends Controller
                 : $anggota->password,
         ]);
 
-        return redirect()->route('admin.anggota.index')->with('success', 'Data anggota berhasil diperbarui!');
+        return redirect()->route('admin.anggota.index')
+            ->with('success', 'Data anggota berhasil diperbarui!');
     }
 
     public function anggotaDestroy(User $anggota)
     {
         $anggota->delete();
-        return redirect()->route('admin.anggota.index')->with('success', 'Anggota berhasil dihapus!');
+        return redirect()->route('admin.anggota.index')
+            ->with('success', 'Anggota berhasil dihapus!');
+    }
+
+    /** -------------------------------
+     * HAPUS REVIEW
+     * ------------------------------- */
+    public function destroyReview($id)
+    {
+        $review = Review::findOrFail($id);
+        $review->delete();
+
+        return redirect()->back()
+            ->with('success', 'Ulasan dan rating berhasil dihapus.');
     }
 }

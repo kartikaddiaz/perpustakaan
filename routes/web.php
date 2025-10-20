@@ -89,3 +89,7 @@ Route::get('reset-password/{token}', [ResetPasswordController::class, 'showReset
 
 Route::post('reset-password', [ResetPasswordController::class, 'reset'])
     ->name('password.update');
+Route::post('/loans/{loan}/review', [LoanController::class, 'updateReview'])->name('loans.review.update');
+Route::get('/my-reviews', [App\Http\Controllers\UserDashboardController::class, 'myReviews'])
+    ->name('reviews.index');
+Route::delete('/admin/reviews/{id}', [AdminController::class, 'destroyReview'])->name('admin.reviews.destroy');

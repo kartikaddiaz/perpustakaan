@@ -14,8 +14,9 @@
 
   <?php echo $__env->make('layouts.header', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
-  <main class="fade-in">
-    <!-- Carousel -->
+  <main class="fade-in container-centered">
+
+    <!-- === Carousel === -->
     <div id="bookCarousel" class="carousel slide mb-5 shadow-lg rounded-4 overflow-hidden" data-bs-ride="carousel">
       <div class="carousel-inner">
         <div class="carousel-item active">
@@ -28,11 +29,12 @@
       </div>
     </div>
 
-    <div class="container mt-4">
+    <!-- === Jelajahi Koleksi Buku === -->
+    <section class="container mt-5">
       <h3 class="text-center mb-4 fw-bold">Jelajahi Koleksi Buku</h3>
 
       <form method="GET" action="<?php echo e(route('user.dashboard')); ?>" class="mb-5">
-        <div class="input-group shadow-sm search-box">
+        <div class="input-group shadow-sm search-box mx-auto">
           <input type="text" name="search" class="form-control form-control-lg border-dark"
                  placeholder="Cari buku atau penulis..." value="<?php echo e($search ?? ''); ?>">
           <button class="btn btn-dark px-4" type="submit">Cari</button>
@@ -43,21 +45,24 @@
       <div class="text-center mb-5 fade-in-delayed">
         <div class="d-flex flex-wrap justify-content-center gap-4">
           <?php $__currentLoopData = $categories->take(5); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-            <a href="<?php echo e(route('user.dashboard', ['category' => $category->id])); ?>" class="text-decoration-none">
+            <a href="<?php echo e(route('user.dashboard', ['category' => $category->id])); ?>" 
+              class="text-decoration-none" 
+              style="color: inherit;">
               <div class="category-card">
                 <p class="fw-semibold mb-0"><?php echo e($category->nama); ?></p>
               </div>
             </a>
           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
-          <a href="<?php echo e(route('user.dashboard')); ?>" class="text-decoration-none">
+          <a href="<?php echo e(route('user.dashboard')); ?>" 
+            class="text-decoration-none" 
+            style="color: inherit;">
             <div class="category-card">
               <p class="fw-semibold mb-0 text-muted">Lainnya</p>
             </div>
           </a>
         </div>
       </div>
-
       <div class="mt-5 fade-in-delayed">
         <h4 class="fw-semibold mb-4 text-center">Yang Populer di Antara Koleksi Kami</h4>
 
@@ -80,9 +85,60 @@
           <?php endif; ?>
         </div>
       </div>
+    </section>
+
+<!-- === Buku Terbaru Minggu Ini === -->
+<section class="mt-5 fade-in-delayed">
+  <h4 class="fw-semibold mb-4 text-center">Buku Terbaru Minggu Ini</h4>
+
+  <div class="book-scroll px-2 pb-3">
+    <?php $__empty_1 = true; $__currentLoopData = $newBooks; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $book): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+      <div class="book-card">
+        <img src="<?php echo e(asset('img/' . basename($book->cover))); ?>"
+             alt="<?php echo e($book->judul); ?>"
+             class="book-cover">
+        <div class="card-body text-center p-3">
+          <h6 class="fw-bold mb-1 text-truncate"><?php echo e($book->judul); ?></h6>
+          <p class="text-muted small mb-2"><?php echo e($book->penulis); ?></p>
+          <a href="<?php echo e(route('books.show', $book->id)); ?>" 
+            class="btn btn-outline-dark btn-sm px-3 py-1">
+            Lihat Buku
+        </a>
+
+        </div>
+      </div>
+    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+      <div class="text-center text-muted w-100">Belum ada buku baru minggu ini.</div>
+    <?php endif; ?>
+  </div>
+</section>
+
+<!-- === Ulasan & Rating Pengguna === -->
+      <section class="mt-5 fade-in-delayed">
+        <h4 class="fw-semibold mb-4 text-center"> Ulasan & Rating Pengguna</h4>
+
+        <div class="d-flex flex-nowrap overflow-auto pb-3 px-2" style="gap: 25px;">
+          <?php $__empty_1 = true; $__currentLoopData = $reviews; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $review): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+            <div class="review-card p-3 shadow-sm rounded text-center" style="min-width: 250px;">
+              <img src="<?php echo e(asset('img/' . basename($review->book->cover ?? 'default.jpg'))); ?>" 
+                   alt="<?php echo e($review->book->judul ?? '-'); ?>" 
+                   class="rounded mb-2" style="height: 150px; object-fit: cover;">
+              <h6 class="fw-bold"><?php echo e($review->book->judul ?? '-'); ?></h6>
+              <p class="text-muted small mb-1"><?php echo e($review->user->name ?? 'Anonim'); ?></p>
+              <div class="text-warning mb-2">
+                <?php for($i = 1; $i <= 5; $i++): ?>
+                  <span class="<?php echo e($i <= $review->rating ? '' : 'text-secondary'); ?>">&#9733;</span>
+                <?php endfor; ?>
+              </div>
+              <p class="small fst-italic text-muted">"<?php echo e(Str::limit($review->komentar, 80)); ?>"</p>
+            </div>
+          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+            <div class="text-center text-muted w-100">Belum ada ulasan yang dibuat pengguna.</div>
+          <?php endif; ?>
+        </div>
+      </section>
     </div>
   </main>
-
   <?php echo $__env->make('layouts.footer', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

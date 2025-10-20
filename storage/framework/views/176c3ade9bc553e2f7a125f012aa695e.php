@@ -15,7 +15,6 @@
         <h2><b>Selamat Datang!</b></h2>
         <p>Masuk ke akun Anda</p>
 
-        <!-- Pesan error -->
         <?php if($errors->any()): ?>
             <div class="error-msg">
                 <ul style="margin:0; padding-left:18px;">
@@ -26,7 +25,6 @@
             </div>
         <?php endif; ?>
 
-        <!-- Form login -->
         <form method="POST" action="<?php echo e(route('login')); ?>">
             <?php echo csrf_field(); ?>
 

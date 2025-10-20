@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Book;
 use App\Models\Category;
+use App\Models\Review;
+use Carbon\Carbon;
 
 class LandingController extends Controller
 {
@@ -13,13 +15,21 @@ class LandingController extends Controller
         $categories = Category::all();
         $search = $request->input('search');
 
-        $books = Book::when($search, function ($query, $search) {
-                return $query->where('judul', 'like', "%{$search}%")
-                             ->orWhere('penulis', 'like', "%{$search}%");
-            })
-            ->latest()
-            ->get();
+        // Ambil 5 buku populer pertama (sama kayak dashboard)
+        $books = Book::take(5)->get();
 
-        return view('landing', compact('categories', 'books', 'search'));
+        // Buku terbaru (7 hari terakhir)
+        $newBooks = Book::where('created_at', '>=', Carbon::now()->subDays(7))
+                        ->latest()
+                        ->take(5)
+                        ->get();
+
+        // Review terbaru
+        $reviews = Review::with(['book', 'user'])
+                        ->latest()
+                        ->take(5)
+                        ->get();
+
+        return view('landing', compact('books', 'newBooks', 'categories', 'reviews', 'search'));
     }
 }
