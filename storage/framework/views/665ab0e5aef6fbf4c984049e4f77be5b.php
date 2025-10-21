@@ -41,61 +41,60 @@
         </div>
     <?php endif; ?>
 
-        <div class="table-responsive fade-in-element">
-            <table id="loanHistory" class="table table-striped align-middle shadow-sm">
-                <thead class="table-dark">
-                    <tr>
-                        <th>Cover</th>
-                        <th>Judul Buku</th>
-                        <th>Penulis</th>
-                        <th>Tanggal Peminjaman</th>
-                        <th>Tanggal Expired</th>
-                        <th>Rating</th>
-                        <th>Ulasan</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php $__currentLoopData = $loans; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $loan): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <tr>
-                        <td>
-                            <img src="<?php echo e(asset('img/' . basename($loan->book->cover ?? 'default.jpg'))); ?>" 
-                                 alt="<?php echo e($loan->book_name ?? $loan->book->judul); ?>" 
-                                 class="cover-img">
-                        </td>
-                        <td style="max-width: 200px;"><?php echo e($loan->book_name ?? $loan->book->judul); ?></td>
-                        <td><?php echo e($loan->book->penulis ?? '-'); ?></td>
-                        <td><?php echo e(Carbon::parse($loan->created_at)->translatedFormat('d F Y')); ?></td>
-                        <td>
-                            <?php if($loan->return_date): ?>
-                                <?php echo e(Carbon::parse($loan->return_date)->translatedFormat('d F Y')); ?>
+    <div class="table-responsive fade-in-element">
+        <table id="loanHistory" class="table table-striped align-middle shadow-sm">
+            <thead class="table-dark">
+                <tr>
+                    <th>Cover</th>
+                    <th>Judul Buku</th>
+                    <th>Penulis</th>
+                    <th>Tanggal Peminjaman</th>
+                    <th>Tanggal Expired</th>
+                    <th>Rating</th>
+                    <th>Ulasan</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php $__currentLoopData = $loans; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $loan): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <tr>
+                    <td>
+                        <img src="<?php echo e(asset('img/' . basename($loan->book->cover ?? 'default.jpg'))); ?>" 
+                             alt="<?php echo e($loan->book_name ?? $loan->book->judul); ?>" 
+                             class="cover-img">
+                    </td>
+                    <td style="max-width: 200px;"><?php echo e($loan->book_name ?? $loan->book->judul); ?></td>
+                    <td><?php echo e($loan->book->penulis ?? '-'); ?></td>
+                    <td><?php echo e(Carbon::parse($loan->created_at)->translatedFormat('d F Y')); ?></td>
+                    <td>
+                        <?php if($loan->return_date): ?>
+                            <?php echo e(Carbon::parse($loan->return_date)->translatedFormat('d F Y')); ?>
 
-                            <?php else: ?>
-                                <span class="text-muted">Belum ditentukan</span>
-                            <?php endif; ?>
-                        </td>
-
-                        <!-- Rating -->
-                        <td>
-                            <form action="<?php echo e(route('loans.review.update', $loan->id)); ?>" method="POST" class="d-flex flex-column gap-1">
-                                <?php echo csrf_field(); ?>
-                                <div class="star-rating d-flex flex-row-reverse justify-content-end">
-                                    <?php for($i = 5; $i >= 1; $i--): ?>
-                                        <input type="radio" id="star<?php echo e($i); ?>-<?php echo e($loan->id); ?>" name="rating" value="<?php echo e($i); ?>" <?php echo e($loan->rating == $i ? 'checked' : ''); ?>>
-                                        <label for="star<?php echo e($i); ?>-<?php echo e($loan->id); ?>">&#9733;</label>
-                                    <?php endfor; ?>
-                                </div>
-                        </td>
-
-                        <!-- Review -->
-                        <td>
-                            <textarea name="review" class="form-control review-textarea" rows="3" placeholder="Tulis ulasan..."><?php echo e($loan->review); ?></textarea>
-                            <button type="submit" class="btn btn-dark mt-2 w-100">Simpan</button>
-                        </td>
-                    </tr>
-                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                </tbody>
-            </table>
-        </div>
+                        <?php else: ?>
+                            <span class="text-muted">Belum ditentukan</span>
+                        <?php endif; ?>
+                    </td>
+                    <!-- Kolom Rating -->
+                    <td>
+                        <form action="<?php echo e(route('loans.review.update', $loan->id)); ?>" method="POST">
+                            <?php echo csrf_field(); ?>
+                            <div class="star-rating d-flex flex-row-reverse justify-content-end">
+                                <?php for($i = 5; $i >= 1; $i--): ?>
+                                    <input type="radio" id="star<?php echo e($i); ?>-<?php echo e($loan->id); ?>" name="rating" value="<?php echo e($i); ?>" <?php echo e($loan->rating == $i ? 'checked' : ''); ?>>
+                                    <label for="star<?php echo e($i); ?>-<?php echo e($loan->id); ?>">&#9733;</label>
+                                <?php endfor; ?>
+                            </div>
+                    </td>
+                    <!-- Kolom Ulasan -->
+                    <td>
+                            <textarea name="review" class="form-control review-textarea" rows="2" placeholder="Tulis ulasan..."><?php echo e($loan->review); ?></textarea>
+                            <button type="submit" class="btn btn-dark btn-sm mt-2 w-100">Simpan</button>
+                        </form>
+                    </td>
+                </tr>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+            </tbody>
+        </table>
+    </div>
     <?php endif; ?>
 </div>
 

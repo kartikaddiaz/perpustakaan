@@ -40,60 +40,59 @@
         </div>
     @endif
 
-        <div class="table-responsive fade-in-element">
-            <table id="loanHistory" class="table table-striped align-middle shadow-sm">
-                <thead class="table-dark">
-                    <tr>
-                        <th>Cover</th>
-                        <th>Judul Buku</th>
-                        <th>Penulis</th>
-                        <th>Tanggal Peminjaman</th>
-                        <th>Tanggal Expired</th>
-                        <th>Rating</th>
-                        <th>Ulasan</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($loans as $loan)
-                    <tr>
-                        <td>
-                            <img src="{{ asset('img/' . basename($loan->book->cover ?? 'default.jpg')) }}" 
-                                 alt="{{ $loan->book_name ?? $loan->book->judul }}" 
-                                 class="cover-img">
-                        </td>
-                        <td style="max-width: 200px;">{{ $loan->book_name ?? $loan->book->judul }}</td>
-                        <td>{{ $loan->book->penulis ?? '-' }}</td>
-                        <td>{{ Carbon::parse($loan->created_at)->translatedFormat('d F Y') }}</td>
-                        <td>
-                            @if($loan->return_date)
-                                {{ Carbon::parse($loan->return_date)->translatedFormat('d F Y') }}
-                            @else
-                                <span class="text-muted">Belum ditentukan</span>
-                            @endif
-                        </td>
-
-                        <!-- Rating -->
-                        <td>
-                            <form action="{{ route('loans.review.update', $loan->id) }}" method="POST" class="d-flex flex-column gap-1">
-                                @csrf
-                                <div class="star-rating d-flex flex-row-reverse justify-content-end">
-                                    @for($i = 5; $i >= 1; $i--)
-                                        <input type="radio" id="star{{ $i }}-{{ $loan->id }}" name="rating" value="{{ $i }}" {{ $loan->rating == $i ? 'checked' : '' }}>
-                                        <label for="star{{ $i }}-{{ $loan->id }}">&#9733;</label>
-                                    @endfor
-                                </div>
-                        </td>
-
-                        <!-- Review -->
-                        <td>
-                            <textarea name="review" class="form-control review-textarea" rows="3" placeholder="Tulis ulasan...">{{ $loan->review }}</textarea>
-                            <button type="submit" class="btn btn-dark mt-2 w-100">Simpan</button>
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
+    <div class="table-responsive fade-in-element">
+        <table id="loanHistory" class="table table-striped align-middle shadow-sm">
+            <thead class="table-dark">
+                <tr>
+                    <th>Cover</th>
+                    <th>Judul Buku</th>
+                    <th>Penulis</th>
+                    <th>Tanggal Peminjaman</th>
+                    <th>Tanggal Expired</th>
+                    <th>Rating</th>
+                    <th>Ulasan</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($loans as $loan)
+                <tr>
+                    <td>
+                        <img src="{{ asset('img/' . basename($loan->book->cover ?? 'default.jpg')) }}" 
+                             alt="{{ $loan->book_name ?? $loan->book->judul }}" 
+                             class="cover-img">
+                    </td>
+                    <td style="max-width: 200px;">{{ $loan->book_name ?? $loan->book->judul }}</td>
+                    <td>{{ $loan->book->penulis ?? '-' }}</td>
+                    <td>{{ Carbon::parse($loan->created_at)->translatedFormat('d F Y') }}</td>
+                    <td>
+                        @if($loan->return_date)
+                            {{ Carbon::parse($loan->return_date)->translatedFormat('d F Y') }}
+                        @else
+                            <span class="text-muted">Belum ditentukan</span>
+                        @endif
+                    </td>
+                    <!-- Kolom Rating -->
+                    <td>
+                        <form action="{{ route('loans.review.update', $loan->id) }}" method="POST">
+                            @csrf
+                            <div class="star-rating d-flex flex-row-reverse justify-content-end">
+                                @for($i = 5; $i >= 1; $i--)
+                                    <input type="radio" id="star{{ $i }}-{{ $loan->id }}" name="rating" value="{{ $i }}" {{ $loan->rating == $i ? 'checked' : '' }}>
+                                    <label for="star{{ $i }}-{{ $loan->id }}">&#9733;</label>
+                                @endfor
+                            </div>
+                    </td>
+                    <!-- Kolom Ulasan -->
+                    <td>
+                            <textarea name="review" class="form-control review-textarea" rows="2" placeholder="Tulis ulasan...">{{ $loan->review }}</textarea>
+                            <button type="submit" class="btn btn-dark btn-sm mt-2 w-100">Simpan</button>
+                        </form>
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
     @endif
 </div>
 

@@ -24,10 +24,9 @@
     @endif
 
     {{-- Form edit buku --}}
-    <form action="{{ route('admin.buku.update', $book->id) }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('book.update', $book->id) }}" method="POST" enctype="multipart/form-data">
     @csrf
     @method('PUT')
-
 
         <div class="mb-3">
             <label class="form-label fw-semibold">Kode Buku</label>

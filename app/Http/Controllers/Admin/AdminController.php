@@ -91,11 +91,6 @@ class AdminController extends Controller
         return view('admin.anggota', compact('users'));
     }
 
-    public function anggotaCreate()
-    {
-        return view('admin.anggota.create');
-    }
-
     public function anggotaStore(Request $request)
     {
         $request->validate([
@@ -113,12 +108,6 @@ class AdminController extends Controller
         return redirect()->route('admin.anggota.index')
             ->with('success', 'Anggota baru berhasil ditambahkan!');
     }
-
-    public function anggotaEdit(User $anggota)
-    {
-        return view('admin.anggota.edit', compact('anggota'));
-    }
-
     public function anggotaUpdate(Request $request, User $anggota)
     {
         $request->validate([
@@ -135,14 +124,14 @@ class AdminController extends Controller
                 : $anggota->password,
         ]);
 
-        return redirect()->route('admin.anggota.index')
+        return redirect()->route('anggota.index')
             ->with('success', 'Data anggota berhasil diperbarui!');
     }
 
     public function anggotaDestroy(User $anggota)
     {
         $anggota->delete();
-        return redirect()->route('admin.anggota.index')
+        return redirect()->route('anggota.index')
             ->with('success', 'Anggota berhasil dihapus!');
     }
 

@@ -75,25 +75,24 @@ class BookController extends Controller
             ->with('success', 'Buku berhasil ditambahkan!');
     }
 
-    public function edit(Book $book)
+    public function edit($id)
     {
-        return view('books.edit', compact('book'));
+        $book = Book::findOrFail($id);
+        return view('book.edit', compact('book'));
     }
 
-    public function update(Request $request, Book $book)
+    public function update(Request $request, $id)
     {
-        $request->validate([
-            'kode_buku' => 'required|unique:books,kode_buku,'.$book->id,
-            'judul' => 'required',
-            'penulis' => 'required',
-            'penerbit' => 'required',
-            'tahun_terbit' => 'required|digits:4|integer',
-            'stok' => 'required|integer|min:0',
+        $book = Book::findOrFail($id);
+
+        $book->update([
+            'judul' => $request->judul,
+            'penulis' => $request->penulis,
+            'penerbit' => $request->penerbit,
+            'tahun_terbit' => $request->tahun_terbit,
         ]);
 
-        $book->update($request->only(['kode_buku','judul','penulis','penerbit','tahun_terbit','stok']));
-
-        return redirect()->route('admin.buku.index')->with('success', 'Buku berhasil diperbarui');
+        return redirect()->route('admin.dashboard')->with('success', 'Buku berhasil diperbarui!');
     }
 
     public function destroy($id)

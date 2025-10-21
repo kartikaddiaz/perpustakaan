@@ -26,9 +26,7 @@
           <h4 class="fw-semibold mb-0">Kelola Anggota</h4>
         </div>
 
-        <a href="<?php echo e(route('anggota.create')); ?>" class="btn btn-primary">
-          <i class="bi bi-plus-circle me-1"></i> Tambah Anggota
-        </a>
+        
       </div>
 
       
@@ -65,9 +63,6 @@
                     <td><?php echo e($user->email); ?></td>
                     <td><?php echo e($user->created_at ? $user->created_at->format('d M Y') : '-'); ?></td>
                     <td class="text-center">
-                    <a href="<?php echo e(route('anggota.edit', $user->id)); ?>" class="btn btn-sm btn-warning me-1">
-                        <i class="bi bi-pencil"></i>
-                    </a>
 
                     <form action="<?php echo e(route('anggota.destroy', $user->id)); ?>" method="POST" class="d-inline" onsubmit="return confirm('Hapus anggota ini?')">
                         <?php echo csrf_field(); ?>

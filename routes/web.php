@@ -16,6 +16,7 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 
 
+
 Route::get('/', [LandingController::class, 'index'])->name('landing');
 
 Route::middleware('auth')->group(function () {
@@ -26,8 +27,6 @@ Route::get('/admin/dashboard', [App\Http\Controllers\Admin\AdminController::clas
     Route::get('/anggota', [AdminController::class, 'anggotaIndex'])->name('anggota.index');
     Route::get('/anggota/create', [AdminController::class, 'anggotaCreate'])->name('anggota.create');
     Route::post('/anggota/store', [AdminController::class, 'anggotaStore'])->name('anggota.store');
-    Route::get('/anggota/{anggota}/edit', [AdminController::class, 'anggotaEdit'])->name('anggota.edit');
-    Route::put('/anggota/{anggota}/update', [AdminController::class, 'anggotaUpdate'])->name('anggota.update');
     Route::delete('/anggota/{anggota}/delete', [AdminController::class, 'anggotaDestroy'])->name('anggota.destroy');
 
 Route::prefix('admin')->name('admin.')->group(function () {
@@ -93,3 +92,7 @@ Route::post('/loans/{loan}/review', [LoanController::class, 'updateReview'])->na
 Route::get('/my-reviews', [App\Http\Controllers\UserDashboardController::class, 'myReviews'])
     ->name('reviews.index');
 Route::delete('/admin/reviews/{id}', [AdminController::class, 'destroyReview'])->name('admin.reviews.destroy');
+Route::get('/admin/buku/{id}/edit', [BookController::class, 'edit'])->name('admin.buku.edit');
+
+Route::get('/book/{id}/edit', [BookController::class, 'edit'])->name('book.edit');
+Route::put('/book/{id}', [BookController::class, 'update'])->name('book.update');
