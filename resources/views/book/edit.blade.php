@@ -53,6 +53,19 @@
             <input type="number" name="tahun_terbit" class="form-control" value="{{ old('tahun_terbit', $book->tahun_terbit) }}">
         </div>
 
+       <div class="mb-3">
+            <label class="form-label fw-semibold">Kategori</label>
+            <select name="category_id" class="form-select" required>
+                <option value="" disabled {{ old('category_id', $book->category_id) ? '' : 'selected' }}>Pilih kategori</option>
+                @foreach ($categories as $category)
+                    <option value="{{ $category->id }}" 
+                        {{ old('category_id', $book->category_id) == $category->id ? 'selected' : '' }}>
+                        {{ $category->nama }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+
         <div class="mb-3">
             <label class="form-label fw-semibold">Deskripsi Buku</label>
             <textarea name="deskripsi" class="form-control" rows="4">{{ old('deskripsi', $book->deskripsi) }}</textarea>
@@ -74,17 +87,16 @@
         </div>
 
         <div class="mb-3">
-    <label>File PDF Buku (opsional)</label>
-    <input type="file" name="pdf" class="form-control" accept="application/pdf">
-    @if ($book->pdf_path)
-        <small class="d-block mt-1">File saat ini: 
-            <a href="{{ asset('storage/pdf/' . $book->pdf_path) }}" target="_blank">
-                {{ $book->pdf_path }}
-            </a>
-        </small>
-    @endif
-</div>
-
+            <label>File PDF Buku (opsional)</label>
+            <input type="file" name="pdf" class="form-control" accept="application/pdf">
+            @if ($book->pdf_path)
+                <small class="d-block mt-1">File saat ini: 
+                    <a href="{{ asset('storage/pdf/' . $book->pdf_path) }}" target="_blank">
+                        {{ $book->pdf_path }}
+                    </a>
+                </small>
+            @endif
+        </div>
 
         <div class="d-flex gap-2">
             <button type="submit" class="btn btn-success">

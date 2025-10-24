@@ -25,8 +25,8 @@ Route::middleware('auth')->group(function () {
 
 Route::get('/admin/dashboard', [App\Http\Controllers\Admin\AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/anggota', [AdminController::class, 'anggotaIndex'])->name('anggota.index');
-    Route::get('/anggota/create', [AdminController::class, 'anggotaCreate'])->name('anggota.create');
-    Route::post('/anggota/store', [AdminController::class, 'anggotaStore'])->name('anggota.store');
+    Route::get('/admin/create', [AdminController::class, 'create'])->name('admin.create');
+    Route::post('/admin/store', [AdminController::class, 'store'])->name('admin.store');
     Route::delete('/anggota/{anggota}/delete', [AdminController::class, 'anggotaDestroy'])->name('anggota.destroy');
 
 Route::prefix('admin')->name('admin.')->group(function () {
@@ -96,3 +96,7 @@ Route::get('/admin/buku/{id}/edit', [BookController::class, 'edit'])->name('admi
 
 Route::get('/book/{id}/edit', [BookController::class, 'edit'])->name('book.edit');
 Route::put('/book/{id}', [BookController::class, 'update'])->name('book.update');
+Route::post('/loans/{loan}/extend', [LoanController::class, 'extend'])->name('loans.extend');Route::post('/review/{book}', [LoanController::class, 'updateReview'])->name('loans.review.update');
+Route::post('/review/{book}', [LoanController::class, 'updateReview'])->name('loans.review.update');
+Route::get('/admin/buku/create', [BookController::class, 'createBuku'])->name('admin.buku.create');
+

@@ -21,10 +21,19 @@
 
     @php
         use Carbon\Carbon;
-        $loans = \App\Models\Loan::where('user_id', Auth::id())
-            ->with('book')
-            ->orderBy('created_at', 'desc')
-            ->get();
+            $loans = \App\Models\Loan::where('user_id', Auth::id())
+        ->with(['book' => function ($q) {
+            $q->select('id', 'judul', 'penulis', 'cover');
+        }])
+        ->orderBy('created_at', 'desc')
+        ->get()
+        ->map(function ($loan) {
+            $loan->reviewData = \App\Models\Review::where('user_id', Auth::id())
+                ->where('book_id', $loan->book->id)
+                ->first();
+            return $loan;
+    });
+
     @endphp
 
     @if($loans->isEmpty())
@@ -49,6 +58,7 @@
                     <th>Penulis</th>
                     <th>Tanggal Peminjaman</th>
                     <th>Tanggal Expired</th>
+                    <th>Perpanjang</th>
                     <th>Rating</th>
                     <th>Ulasan</th>
                 </tr>
@@ -71,23 +81,36 @@
                             <span class="text-muted">Belum ditentukan</span>
                         @endif
                     </td>
+                    <td>
+                    @if($loan->return_date)
+                        <div class="d-flex align-items-center justify-content-between">
+                            <form action="{{ route('loans.extend', $loan->id) }}" method="POST" class="ms-2">
+                                @csrf
+                                <button type="submit" class="btn btn-sm btn-outline-dark">Perpanjang</button>
+                            </form>
+                        </div>
+                    @else
+                        <span class="text-muted">Belum ditentukan</span>
+                    @endif
+                </td>
                     <!-- Kolom Rating -->
                     <td>
-                        <form action="{{ route('loans.review.update', $loan->id) }}" method="POST">
-                            @csrf
-                            <div class="star-rating d-flex flex-row-reverse justify-content-end">
-                                @for($i = 5; $i >= 1; $i--)
-                                    <input type="radio" id="star{{ $i }}-{{ $loan->id }}" name="rating" value="{{ $i }}" {{ $loan->rating == $i ? 'checked' : '' }}>
-                                    <label for="star{{ $i }}-{{ $loan->id }}">&#9733;</label>
-                                @endfor
-                            </div>
-                    </td>
-                    <!-- Kolom Ulasan -->
-                    <td>
-                            <textarea name="review" class="form-control review-textarea" rows="2" placeholder="Tulis ulasan...">{{ $loan->review }}</textarea>
-                            <button type="submit" class="btn btn-dark btn-sm mt-2 w-100">Simpan</button>
-                        </form>
-                    </td>
+                    <form action="{{ route('loans.review.update', $loan->book->id) }}" method="POST">
+                        @csrf
+                        <div class="star-rating d-flex flex-row-reverse justify-content-end">
+                            @for($i = 5; $i >= 1; $i--)
+                                <input type="radio" id="star{{ $i }}-{{ $loan->book->id }}" name="rating" value="{{ $i }}"
+                                    {{ optional($loan->reviewData)->rating == $i ? 'checked' : '' }}>
+                                <label for="star{{ $i }}-{{ $loan->book->id }}">&#9733;</label>
+                            @endfor
+                        </div>
+                </td>
+                <td>
+                        <textarea name="review" class="form-control review-textarea" rows="2"
+                            placeholder="Tulis ulasan...">{{ optional($loan->reviewData)->komentar }}</textarea>
+                        <button type="submit" class="btn btn-dark btn-sm mt-2 w-100">Simpan</button>
+                    </form>
+                </td>
                 </tr>
                 @endforeach
             </tbody>

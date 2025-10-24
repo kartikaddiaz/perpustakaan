@@ -46,6 +46,7 @@ class BookController extends Controller
             'deskripsi' => 'nullable|string',
             'cover' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'pdf' => 'nullable|mimes:pdf|max:10240',
+            'category_id' => 'required|exists:categories,id', 
         ]);
 
         $coverName = null;
@@ -78,22 +79,51 @@ class BookController extends Controller
     public function edit($id)
     {
         $book = Book::findOrFail($id);
-        return view('book.edit', compact('book'));
+        $categories = \App\Models\Category::all(); // ambil semua kategori
+        return view('book.edit', compact('book', 'categories'));
     }
+
 
     public function update(Request $request, $id)
-    {
-        $book = Book::findOrFail($id);
+{
+    $book = Book::findOrFail($id);
 
-        $book->update([
-            'judul' => $request->judul,
-            'penulis' => $request->penulis,
-            'penerbit' => $request->penerbit,
-            'tahun_terbit' => $request->tahun_terbit,
-        ]);
+    // 1️⃣ Validasi input
+    $validated = $request->validate([
+        'judul' => 'required|string|max:255',
+        'penulis' => 'nullable|string|max:255',
+        'penerbit' => 'nullable|string|max:255',
+        'tahun_terbit' => 'nullable|integer',
+        'deskripsi' => 'nullable|string',
+        'cover' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        'pdf' => 'nullable|mimes:pdf|max:10240',
+        'category_id' => 'required|exists:categories,id', // wajib sesuai kategori
+    ]);
 
-        return redirect()->route('admin.dashboard')->with('success', 'Buku berhasil diperbarui!');
+    // 2️⃣ Handle cover jika diupdate
+    if ($request->hasFile('cover')) {
+        // hapus cover lama
+        if ($book->cover && file_exists(public_path('img/' . $book->cover))) {
+            unlink(public_path('img/' . $book->cover));
+        }
+        $coverName = time() . '.' . $request->cover->extension();
+        $request->cover->move(public_path('img'), $coverName);
+        $validated['cover'] = $coverName;
     }
+
+    // 3️⃣ Handle PDF jika diupdate
+    if ($request->hasFile('pdf')) {
+        // opsional: hapus PDF lama jika perlu
+        $pdfPath = $request->file('pdf')->store('pdf', 'public');
+        $validated['pdf_path'] = $pdfPath;
+    }
+
+    // 4️⃣ Update book dengan data tervalidasi
+    $book->update($validated);
+
+    return redirect()->route('admin.dashboard')
+        ->with('success', 'Buku berhasil diperbarui!');
+}
 
     public function destroy($id)
     {
@@ -173,4 +203,10 @@ class BookController extends Controller
         $favorites = Book::where('is_favorite', true)->get();
         return view('book.favorite', compact('favorites'));
     }
+    public function createBuku()
+    {
+        $categories = \App\Models\Category::all();
+        return view('book.create', compact('categories'));
+    }
+
 }

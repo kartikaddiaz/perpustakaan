@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daftar Buku</title>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdn.datatables.net/2.3.4/css/dataTables.bootstrap5.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/2.3.4/css/dataTables.bootstrap5.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <link href="{{ asset('css/daftar-buku.css') }}" rel="stylesheet">
 </head>
 <body class="bg-light text-dark">
@@ -15,9 +15,9 @@
 
 <div class="container mt-5 fade-in">
     <div class="d-flex align-items-center mb-4">
-      <a href="{{ url()->previous() }}" class="btn btn-outline-secondary me-3 back-btn">
-        &lt;
-      </a>
+        <a href="{{ url()->previous() }}" class="btn btn-outline-secondary me-3 back-btn">
+            &lt;
+        </a>
         <h3 class="mb-0 fw-bold">Daftar Buku</h3>
     </div>
 
@@ -32,6 +32,7 @@
                         <th>Judul</th>
                         <th>Penulis</th>
                         <th>Penerbit</th>
+                        <th>Kategori</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -47,12 +48,21 @@
                         <td>{{ $b->penulis }}</td>
                         <td>{{ $b->penerbit }}</td>
                         <td>
-                            <form action="{{ route('cart.add', $b->id) }}" method="POST">
-                                @csrf
-                                <button type="submit" class="btn btn-sm btn-dark rounded-3 px-3">
-                                    Pinjam Buku
+                            {{ $b->category->nama ?? 'Tidak Ada' }}
+                        </td>
+                        <td>
+                            @if($b->pdf_path)
+                                <form action="{{ route('cart.add', $b->id) }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="btn btn-sm btn-dark rounded-3 px-3">
+                                        Pinjam Buku
+                                    </button>
+                                </form>
+                            @else
+                                <button type="button" class="btn btn-sm btn-secondary rounded-3 px-3" disabled title="File PDF belum diunggah">
+                                    Tidak Tersedia
                                 </button>
-                            </form>
+                            @endif
                         </td>
                     </tr>
                     @endforeach
@@ -68,7 +78,6 @@
 <script src="https://cdn.datatables.net/2.3.4/js/dataTables.js"></script>
 <script src="https://cdn.datatables.net/2.3.4/js/dataTables.bootstrap5.js"></script>
 
-<!-- ✅ Aktifkan DataTables -->
 <script>
     new DataTable('#booksTable', {
         responsive: true,

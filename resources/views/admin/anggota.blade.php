@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kelola Anggota</title>
-  
+
   <link rel="stylesheet" href="{{ asset('css/anggota.css') }}?v={{ time() }}">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
@@ -25,8 +25,6 @@
           </a>
           <h4 class="fw-semibold mb-0">Kelola Anggota</h4>
         </div>
-
-        
       </div>
 
       {{-- Alert sukses --}}
@@ -37,65 +35,69 @@
         </div>
       @endif
 
-      {{-- Tabel anggota --}}
-      <div class="card shadow-sm border-0">
-        <div class="card-header bg-light">
-          <h6 class="mb-0">Daftar Anggota</h6>
-        </div>
-        <div class="card-body p-0">
-          <div class="table-responsive p-3">
-            <table id="anggotaTable" class="table table-striped table-hover align-middle mb-0">
-              <thead class="table-light">
+          {{-- Tabel anggota --}}
+    <div class="card shadow-sm border-0">
+      <div class="card-header bg-light d-flex justify-content-between align-items-center">
+        <h6 class="mb-0">Daftar Anggota</h6>
+        <a href="{{ route('admin.create') }}" class="btn btn-dark">
+          <i class="bi bi-person-plus"></i> Tambah Anggota
+        </a>
+      </div>  
+      <div class="card-body p-0">
+        <div class="table-responsive p-3">
+          <table id="anggotaTable" class="table table-striped table-hover align-middle mb-0">
+            <thead class="table-light">
+              <tr>
+                <th>#</th>
+                <th>Nama</th>
+                <th>Email</th>
+                <th>Tanggal Bergabung</th>
+                <th class="text-center">Aksi</th>
+              </tr>
+            </thead>
+            <tbody>
+              @forelse ($users as $user)
                 <tr>
-                  <th>#</th>
-                  <th>Nama</th>
-                  <th>Email</th>
-                  <th>Tanggal Bergabung</th>
-                  <th class="text-center">Aksi</th>
-                </tr>
-              </thead>
-              <tbody>
-                @forelse ($users as $user)
-                  <tr>
-                    <td>{{ $loop->iteration }}</td>
-                    <td>{{ $user->name }}</td>
-                    <td>{{ $user->email }}</td>
-                    <td>{{ $user->created_at ? $user->created_at->format('d M Y') : '-' }}</td>
-                    <td class="text-center">
+                  <td>{{ $loop->iteration }}</td>
+                  <td>{{ $user->name }}</td>
+                  <td>{{ $user->email }}</td>
+                  <td>{{ $user->created_at ? $user->created_at->format('d M Y') : '-' }}</td>
+                  <td class="text-center">
 
                     <form action="{{ route('anggota.destroy', $user->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Hapus anggota ini?')">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-sm btn-danger me-1">
+                      @csrf
+                      @method('DELETE')
+                      <button type="submit" class="btn btn-sm btn-danger me-1">
                         <i class="bi bi-trash"></i>
-                        </button>
+                      </button>
                     </form>
 
                     <form action="{{ route('anggota.ban', $user->id) }}" method="POST" class="d-inline" onsubmit="return confirm('{{ $user->is_banned ? 'Aktifkan kembali akun ini?' : 'Blokir akun ini?' }}')">
-                        @csrf
-                        @method('PATCH')
-                        @if ($user->is_banned)
+                      @csrf
+                      @method('PATCH')
+                      @if ($user->is_banned)
                         <button type="submit" class="btn btn-sm btn-success">
-                            <i class="bi bi-unlock"></i>
+                          <i class="bi bi-unlock"></i>
                         </button>
-                        @else
+                      @else
                         <button type="submit" class="btn btn-sm btn-secondary">
-                            <i class="bi bi-lock"></i>
+                          <i class="bi bi-lock"></i>
                         </button>
-                        @endif
+                      @endif
                     </form>
-                </td>
-                  </tr>
-                @empty
-                  <tr>
-                    <td colspan="6" class="text-center text-muted py-4">Belum ada anggota.</td>
-                  </tr>
-                @endforelse
-              </tbody>
-            </table>
-          </div>
+
+                  </td>
+                </tr>
+              @empty
+                <tr>
+                  <td colspan="6" class="text-center text-muted py-4">Belum ada anggota.</td>
+                </tr>
+              @endforelse
+            </tbody>
+          </table>
         </div>
       </div>
+    </div>
     </div>
   </div>
 

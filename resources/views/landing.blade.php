@@ -32,7 +32,7 @@
     <section class="container mt-5">
       <h3 class="text-center mb-4 fw-bold">Jelajahi Koleksi Buku</h3>
 
-      <form method="GET" action="{{ route('user.dashboard') }}" class="mb-5">
+      <form method="GET" action="{{ route('landing') }}" class="mb-5">
         <div class="input-group shadow-sm search-box mx-auto">
           <input type="text" name="search" class="form-control form-control-lg border-dark"
                  placeholder="Cari buku atau penulis..." value="{{ $search ?? '' }}">
@@ -76,9 +76,10 @@
               <div class="card-body text-center p-3">
                 <h6 class="fw-bold mb-1 text-truncate">{{ $book->judul }}</h6>
                 <p class="text-muted small mb-2">{{ $book->penulis }}</p>
-                <a href="{{ route('login') }}" class="btn btn-outline-dark btn-sm px-3 py-1">
+                <a href="{{ route('books.show', $book->id) }}" 
+                  class="btn btn-outline-dark btn-sm px-3 py-1">
                   Lihat Buku
-                </a>
+              </a>
               </div>
             </div>
           @empty
@@ -89,7 +90,7 @@
 
       <!-- === Buku Terbaru Minggu Ini === -->
       <section class="mt-5 fade-in-delayed">
-        <h4 class="fw-semibold mb-4 text-center">Buku Terbaru Minggu Ini</h4>
+        <h4 class="fw-semibold mb-4 text-center">Koleksi Buku Terbaru</h4>
 
         <div class="d-flex flex-nowrap overflow-auto pb-3 px-2" style="gap: 25px;">
           @forelse($newBooks as $book)

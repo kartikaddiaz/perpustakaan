@@ -10,16 +10,6 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{{ asset('css/beranda-admin.css') }}?v={{ time() }}">
-
-  <style>
-    body { font-family: 'Poppins', sans-serif; background: #f8f9fa; }
-    .cover-thumb { width: 45px; height: 60px; object-fit: cover; border-radius: 4px; }
-    .chart-section { display: flex; gap: 1rem; align-items: start; }
-    .chart-box { flex: 1; max-width: 200px; }
-    .list-box { flex: 2; }
-    .card h6 { font-weight: 600; }
-    .table th, .table td { vertical-align: middle !important; }
-  </style>
 </head>
 
 <body>

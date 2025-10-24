@@ -35,6 +35,18 @@
             </div>
 
             <div class="mb-3">
+                <label class="form-label">Kategori</label>
+                <select name="category_id" class="form-select" required>
+                    <option value="" disabled selected>Pilih kategori</option>
+                    @foreach($categories as $category)
+                        <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
+                            {{ $category->nama }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="mb-3">
                 <label class="form-label">Judul Buku</label>
                 <input type="text" name="judul" class="form-control" value="{{ old('judul') }}" required>
             </div>

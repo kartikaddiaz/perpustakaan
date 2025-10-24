@@ -89,7 +89,7 @@
 
 <!-- === Buku Terbaru Minggu Ini === -->
 <section class="mt-5 fade-in-delayed">
-  <h4 class="fw-semibold mb-4 text-center">Buku Terbaru Minggu Ini</h4>
+  <h4 class="fw-semibold mb-4 text-center">Koleksi Buku Terbaru</h4>
 
   <div class="book-scroll px-2 pb-3">
     @forelse($newBooks as $book)

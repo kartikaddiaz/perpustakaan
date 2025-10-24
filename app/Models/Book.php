@@ -17,6 +17,7 @@ class Book extends Model
         'penulis',
         'penerbit',
         'tahun_terbit',
+        'category_id',
         'deskripsi',
         'cover',
         'pdf_path',
@@ -27,5 +28,12 @@ class Book extends Model
 {
     return $this->hasMany(Favorite::class);
 }
+// app/Models/Book.php
+public function category()
+{
+    return $this->belongsTo(Category::class);
+}
+
+
 }
 

@@ -18,12 +18,12 @@
     @include('layouts.navbar')
   @endauth
 
-@if (session('success'))
-  <div class="alert alert-success alert-dismissible fade show" role="alert">
-    {{ session('success') }}
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-  </div>
-@endif
+  @if (session('success'))
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+      {{ session('success') }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  @endif
 
   <div class="container my-5">
     <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
@@ -42,29 +42,36 @@
             <p class="mt-2" style="text-align: justify;">
               {{ $book->deskripsi }}
             </p>
+
             @auth
-      <form action="{{ route('favorites.toggle', $book->id) }}" method="POST" class="d-inline">
-          @csrf
-          @if($book->favorites->where('user_id', Auth::id())->count() > 0)
-              <!-- Kalau buku SUDAH difavoritkan -->
-              <button type="submit" class="btn btn-favorite mt-3" title="Hapus dari Favorit">
-                  💔
-              </button>
-          @else
-              <!-- Kalau BELUM difavoritkan -->
-              <button type="submit" class="btn btn-favorite mt-3" title="Tambah ke Favorit">
-                  ❤️
-              </button>
-          @endif
-      </form>
-          @else
-            <a href="{{ route('login') }}" class="btn btn-outline-danger mt-3">❤️</a>
-          @endauth
+              <form action="{{ route('favorites.toggle', $book->id) }}" method="POST" class="d-inline">
+                  @csrf
+                  @if($book->favorites->where('user_id', Auth::id())->count() > 0)
+                      <button type="submit" class="btn btn-favorite mt-3" title="Hapus dari Favorit">
+                          💔
+                      </button>
+                  @else
+                      <button type="submit" class="btn btn-favorite mt-3" title="Tambah ke Favorit">
+                          ❤️
+                      </button>
+                  @endif
+              </form>
+            @else
+              <a href="{{ route('login') }}" class="btn btn-outline-danger mt-3">❤️</a>
+            @endauth
+
             <a href="{{ route('user.dashboard') }}" class="btn btn-outline-secondary mt-3">Kembali</a>
-            <form action="{{ route('cart.add', $book->id) }}" method="POST" class="d-inline">
-                @csrf
-                <button type="submit" class="btn btn-success mt-3">Tambah ke Keranjang</button>
-            </form>
+
+            {{-- ✅ Tombol pinjam hanya untuk buku yang ada PDF-nya --}}
+            @if ($book->pdf_path)
+              <form action="{{ route('cart.add', $book->id) }}" method="POST" class="d-inline">
+                  @csrf
+                  <button type="submit" class="btn btn-success mt-3">Tambah ke Keranjang</button>
+              </form>
+            @else
+              <button class="btn btn-secondary mt-3" disabled>Tidak tersedia untuk dipinjam</button>
+            @endif
+
           </div>
         </div>
       </div>

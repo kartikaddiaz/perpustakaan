@@ -12,66 +12,66 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
+use App\Models\Category;
 
 class AdminController extends Controller
 {
     /** -------------------------------
      * DASHBOARD
      * ------------------------------- */
+    
     public function dashboard()
-    {
-        $totalBooks = Book::count();
-        $totalUsers = User::count();
-        $totalLoansActive = Loan::where('status', 'dipinjam')->count();
-        $totalLoansToday = Loan::whereDate('loan_date', Carbon::today())->count();
+{
+    $totalBooks = Book::count();
+    $totalUsers = User::count();
+    $totalLoansActive = Loan::where('status', 'dipinjam')->count();
+    $totalLoansToday = Loan::whereDate('loan_date', Carbon::today())->count();
 
-        // 📚 Buku paling banyak dipinjam
-        $mostBorrowedBooks = Loan::select('book_id', DB::raw('COUNT(*) as total_loans'))
-            ->groupBy('book_id')
-            ->orderByDesc('total_loans')
-            ->take(5)
-            ->with('book')
-            ->get()
-            ->map(function ($loan) {
-                return (object)[
-                    'id' => $loan->book_id,
-                    'judul' => $loan->book->judul ?? 'Tidak diketahui',
-                    'total_loans' => (int) $loan->total_loans,
-                ];
-            });
+    // 📚 Buku paling banyak dipinjam (SEMUA DATA)
+    $mostBorrowedBooks = Loan::with('book')
+        ->select('book_id', DB::raw('COUNT(*) as total_loans'))
+        ->groupBy('book_id')
+        ->orderByDesc('total_loans')
+        ->get()
+        ->map(function ($loan) {
+            return (object) [
+                'id' => $loan->book_id,
+                'judul' => optional($loan->book)->judul ?? 'Tidak diketahui',
+                'total_loans' => (int) $loan->total_loans,
+            ];
+        });
 
-        // ❤️ Buku paling banyak difavoritkan
-        $mostFavoritedBooks = Favorite::select('book_id', DB::raw('COUNT(*) as total_favorites'))
-            ->groupBy('book_id')
-            ->orderByDesc('total_favorites')
-            ->take(5)
-            ->with('book')
-            ->get()
-            ->map(function ($favorite) {
-                return (object)[
-                    'id' => $favorite->book_id,
-                    'judul' => $favorite->book->judul ?? 'Tidak diketahui',
-                    'total_favorites' => (int) $favorite->total_favorites,
-                ];
-            });
+    // ❤️ Buku paling banyak difavoritkan (SEMUA DATA)
+    $mostFavoritedBooks = Favorite::with('book')
+        ->select('book_id', DB::raw('COUNT(*) as total_favorites'))
+        ->groupBy('book_id')
+        ->orderByDesc('total_favorites')
+        ->get()
+        ->map(function ($favorite) {
+            return (object) [
+                'id' => $favorite->book_id,
+                'judul' => optional($favorite->book)->judul ?? 'Tidak diketahui',
+                'total_favorites' => (int) $favorite->total_favorites,
+            ];
+        });
 
-        // 📘 Buku, pengguna, dan peminjaman terbaru
-        $latestBooks = Book::latest()->take(5)->get();
-        $latestUsers = User::latest()->take(5)->get();
-        $latestLoans = Loan::with(['book', 'user'])->latest()->take(5)->get();
+    // 📘 Buku, pengguna, dan peminjaman terbaru
+    $latestBooks = Book::latest()->get();
+    $latestUsers = User::latest()->get();
+    $latestLoans = Loan::with(['book', 'user'])->latest()->get();
 
-        // 🗣️ Review terbaru
-        $reviews = Review::with(['book', 'user'])
-            ->latest()
-            ->take(10)
-            ->get();
+    // 🗣️ Review terbaru
+    $reviews = Review::with(['book', 'user'])
+        ->latest()
+        ->get();
 
-        return view('admin.dashboard', compact(
-            'totalBooks', 'totalUsers', 'totalLoansActive', 'totalLoansToday',
-            'mostBorrowedBooks', 'mostFavoritedBooks',
-            'latestBooks', 'latestUsers', 'latestLoans', 'reviews'
-        ));
-    }
+    return view('admin.dashboard', compact(
+        'totalBooks', 'totalUsers', 'totalLoansActive', 'totalLoansToday',
+        'mostBorrowedBooks', 'mostFavoritedBooks',
+        'latestBooks', 'latestUsers', 'latestLoans', 'reviews'
+    ));
+}
+
 
     /** -------------------------------
      * KELOLA ANGGOTA
@@ -91,7 +91,12 @@ class AdminController extends Controller
         return view('admin.anggota', compact('users'));
     }
 
-    public function anggotaStore(Request $request)
+    public function create()
+    {
+        return view('admin.create');
+    }
+
+    public function store(Request $request)
     {
         $request->validate([
             'name' => 'required|string|max:100',
@@ -105,9 +110,10 @@ class AdminController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        return redirect()->route('admin.anggota.index')
+        return redirect()->route('anggota.index')
             ->with('success', 'Anggota baru berhasil ditambahkan!');
     }
+
     public function anggotaUpdate(Request $request, User $anggota)
     {
         $request->validate([
@@ -146,4 +152,5 @@ class AdminController extends Controller
         return redirect()->back()
             ->with('success', 'Ulasan dan rating berhasil dihapus.');
     }
+    
 }

@@ -128,32 +128,27 @@ class LoanController extends Controller
 
         return view('admin.laporan', compact('latestLoans'));
     }
-   public function updateReview(Request $request, $id)
+   public function updateReview(Request $request, $bookId)
 {
     $request->validate([
-        'rating' => 'nullable|integer|min:1|max:5',
-        'review' => 'nullable|string|max:1000',
+        'rating' => 'required|integer|min:1|max:5',
+        'review' => 'nullable|string',
     ]);
 
-    $loan = Loan::findOrFail($id);
-    $loan->update([
-        'rating' => $request->rating,
-        'review' => $request->review,
-    ]);
-
-    // Tambahkan atau update di tabel reviews juga
     Review::updateOrCreate(
-        [
-            'user_id' => $loan->user_id,
-            'book_id' => $loan->book_id,
-        ],
-        [
-            'cover' => $loan->book->cover ?? null,
-            'rating' => $request->rating,
-            'komentar' => $request->review,
-        ]
+        ['user_id' => Auth::id(), 'book_id' => $bookId],
+        ['rating' => $request->rating, 'komentar' => $request->review]
     );
 
-    return back()->with('status', 'Berhasil menambahkan ulasan dan rating!');
+    return back()->with('status', 'Review berhasil disimpan!');
 }
+
+    public function extend(Loan $loan)
+    {
+        // Tambah 7 hari dari tanggal expired sekarang
+        $loan->return_date = Carbon::parse($loan->return_date)->addDays(7);
+        $loan->save();
+
+        return back()->with('status', 'Masa peminjaman berhasil diperpanjang.');
+    }
 }
