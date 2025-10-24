@@ -93,7 +93,7 @@
                         <span class="text-muted">Belum ditentukan</span>
                     @endif
                 </td>
-                    <!-- Kolom Rating -->
+                    {{-- Kolom Rating --}}
                     <td>
                     <form action="{{ route('loans.review.update', $loan->book->id) }}" method="POST">
                         @csrf
@@ -108,7 +108,13 @@
                 <td>
                         <textarea name="review" class="form-control review-textarea" rows="2"
                             placeholder="Tulis ulasan...">{{ optional($loan->reviewData)->komentar }}</textarea>
+                        @if(optional($loan->reviewData)->komentar)
+                        <button type="submit" class="btn btn-dark btn-sm mt-2 w-100" disabled style="opacity: 0.6; cursor: not-allowed;">
+                            Sudah Disimpan
+                        </button>
+                    @else
                         <button type="submit" class="btn btn-dark btn-sm mt-2 w-100">Simpan</button>
+                    @endif
                     </form>
                 </td>
                 </tr>
